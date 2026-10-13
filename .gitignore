@@ -1,0 +1,10 @@
+node_modules
+dist
+.vite
+*.local
+*.tar.gz
+.DS_Store
+.playwright-cli/
+xiaomi-bg.png
+.vercel
+.openai/
