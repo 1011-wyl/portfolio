@@ -3,6 +3,8 @@ import SchoolIcon from '@mui/icons-material/School';
 import BuildIcon from '@mui/icons-material/Build';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
 import { education } from '../data/repos';
 
 const projectCards = [
@@ -35,6 +37,26 @@ const projectCards = [
     description:
       '多智能体个性化旅行规划平台，将城市偏好、地图、天气、预算与行程汇总为可编辑、可追问、可导出的逐日计划。通过 MCP 接入外部工具，WebSocket 流式反馈规划过程，并为地图服务设计多级降级策略。',
     techStack: ['FastAPI', 'HelloAgents', 'MCP', 'WebSocket', 'Vue 3', 'ECharts'],
+  },
+  {
+    icon: <DarkModeIcon sx={{ fontSize: 22 }} />,
+    title: '月下疑局 · 多智能体狼人杀',
+    role: '独立项目',
+    period: '2026',
+    subtitle: 'React 19 · Vinext · DeepSeek',
+    description:
+      '构建本地 12 人文字狼人杀，支持真人玩家与 11 个 AI 在隐藏身份、夜间技能、警长竞选和放逐投票中完成推理博弈。以状态机管理完整规则和角色私有信息，DeepSeek 驱动角色决策；严格 5 秒并发投票窗口对超时或失败自动弃票，并通过阶段快照支持暂停恢复。测试覆盖 100 局规则闭环、信息隔离、角色技能与并发边界。',
+    techStack: ['React 19', 'TypeScript', 'Vinext', 'DeepSeek', 'State Machine', 'Node.js'],
+  },
+  {
+    icon: <PsychologyAltIcon sx={{ fontSize: 22 }} />,
+    title: '心理咨询与诊断平台',
+    role: '全栈项目',
+    period: '2026',
+    subtitle: 'Spring Boot · Vue 2 · MySQL',
+    description:
+      '构建面向用户、咨询师和管理员的前后端分离心理服务平台，覆盖心理评估、咨询预约、报告查看与后台管理。后端基于 Spring Boot 2.7、MyBatis 与 MySQL，使用 JWT 和服务端接口校验隔离三类角色权限；通过唯一约束处理预约时段并发占用，并实现 BCrypt 密码加密与旧 MD5 密码首次登录自动迁移。',
+    techStack: ['Spring Boot', 'Java 8', 'Vue 2', 'MyBatis', 'MySQL', 'JWT', 'BCrypt'],
   },
 ];
 
