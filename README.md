@@ -2,7 +2,7 @@
 
 面向 AI 应用开发实习岗位的个人作品集，展示 Agent 编排、RAG、多智能体系统与全栈项目。
 
-在线地址将在 GitHub Pages 部署后更新。
+在线地址：[https://1011-wyl.github.io/portfolio/](https://1011-wyl.github.io/portfolio/)
 
 ## 展示内容
 
