@@ -1,16 +1,19 @@
 import { ApiError } from './api-error';
 import tags from './demo-tags.json';
+import sampleChapters from './demo-chapters.json';
+import { countChapterChars } from '@/features/reader/utils/chapter-count';
 const now = '2026-10-02T12:00:00';
 const project = { id:'demo', title:'雾岛来信', status:'ACTIVE', confirmed:true, current_chapter:3, created_at:now, updated_at:now,
  request:{audience_channel:'女频',genre:'悬疑',preferred_title:'雾岛来信',experiences:['悬疑探秘'],elements:['旧日谜团'],protagonist_tags:[],romance:null,idea:'一封迟到七年的信，揭开一座岛的秘密。',must_have:[],nice_to_have:[],exclude:[],chapter_target_chars:2200,daily_chapters:1,reserve_target:5,require_plan_confirmation:true},
  brief:{selected_title:'雾岛来信',title_candidates:['雾岛来信'],synopsis:'七年前，一座岛与一群人共同消失。如今，一封来自失踪者的信打破了林见微平静的生活。她必须在记忆与现实的裂缝中，找到被隐藏的真相。',target_readers:'喜欢悬疑与人物故事的读者',selling_points:['旧日谜团','失踪者来信'],protagonist:'林见微',protagonist_name:'林见微',protagonist_profile:'旧书店店主，谨慎而敏锐。',main_conflict:'追寻失踪的父亲与雾岛的真相',reader_contract:'循序揭开谜团',core_expectation:'悬疑与情感并行',world_rules:['雾岛从公开地图上消失'],total_chapters:100,volume_count:4,opening_three_chapters:['雨夜收到来信','地下室的灯亮起','一张地图出现'],update_plan:'每日一章',style_guide:['细节中埋设悬念']} };
-const chapters = [
- ['雨夜来信','雨是在傍晚落下来的。\n\n林见微站在旧书店门口，看着街对面的灯一盏盏亮起。最后一班电车驶过，车窗里的人影像一段被匆忙擦去的旧梦。\n\n她正准备关门，一封信从门缝底下滑了进来。信封没有邮票，只有她的名字，字迹熟悉得让她的手指微微一顿。\n\n写信的人，七年前就已经失踪了。\n\n她拆开信。里面只有一句话：如果你还记得那座岛，明天日落之前，不要打开书店地下室的门。'],
- ['地下室的灯','第二天，林见微比平时早到了一个小时。\n\n书店里安静得能听见钟摆的声音。她把信放在柜台上，又一次确认那行字没有改变。\n\n地下室的门锁着，门缝里却透出一道细细的光。\n\n门后传来一声轻响，像有人翻过了一页书。'],
- ['消失的地图','地下室的灯在她碰到门把手之前熄灭了。\n\n林见微没有立刻进去。她想起父亲说过，面对一件不合理的事，先去寻找第二件。\n\n柜台上的信不见了，取而代之的是一张折叠整齐的地图。']
-].map(([title,content],i)=>({id:`chapter-${i+1}`,number:i+1,title,content,summary:content.slice(0,60),status:'READY',version:1,created_at:now}));
-const detail={project,chapters,latest_events:[],characters:[{id:'c1',name:'林见微',role:'主角',immutable_facts:['旧书店店主'],current_state:{目标:'寻找父亲失踪的真相',位置:'旧书店'}},{id:'c2',name:'林远山',role:'重要人物',immutable_facts:['林见微的父亲','七年前失踪'],current_state:{状态:'失踪'}}],world_facts:[{category:'地点',statement:'雾岛从公开地图上消失',locked:true}],timeline:[{chapter_number:1,event:'林见微收到父亲的信'},{chapter_number:2,event:'地下室的灯亮起'}],research_sources:[],semantic_document_count:0,reserve_count:3,chapter_failures:[]};
-const summary={...project,audience_channel:'女频',genre:'悬疑',chapter_count:3,content_chars:chapters.reduce((n,c)=>n+c.content.length,0)};
+const summaries = [
+ '旧书店主林见微收到一封疑似失踪父亲寄来的信，地下室传出不明声音。',
+ '地下室在断电后亮起灯光，见微追查暗道，听见童年与父亲约定的暗号。',
+ '一张雾岛地图揭开十七号观测站的线索，见微决定前往东堤寻找真相。',
+];
+const chapters = sampleChapters.map(([title,content],i)=>({id:`chapter-${i+1}`,number:i+1,title,content,summary:summaries[i],status:'READY',version:1,created_at:now}));
+const detail={project,chapters,latest_events:[],characters:[{id:'c1',name:'林见微',role:'主角',immutable_facts:['旧书店店主'],current_state:{目标:'寻找父亲失踪的真相',位置:'旧书店'}},{id:'c2',name:'林远山',role:'重要人物',immutable_facts:['林见微的父亲','七年前失踪'],current_state:{状态:'失踪'}}],world_facts:[{category:'地点',statement:'雾岛从公开地图上消失',locked:true}],timeline:[{chapter_number:1,event:'林见微收到父亲的信'},{chapter_number:2,event:'地下室亮灯，见微发现暗道和父亲留下的暗号'},{chapter_number:3,event:'见微找到雾岛地图与钥匙，决定调查东堤'}],research_sources:[],semantic_document_count:0,reserve_count:3,chapter_failures:[]};
+const summary={...project,audience_channel:'女频',genre:'悬疑',chapter_count:3,content_chars:chapters.reduce((n,c)=>n+countChapterChars(c.content),0)};
 let drafts: Record<number, any> = {};
 const projects: Record<string, any> = { demo: detail };
 let preferences: any = {daily_chapters:2,reserve_target:5,budget_limit:0,debug_mode:false};
@@ -63,7 +66,7 @@ export async function demoRequest(path:string, options:{method?:string;body?:unk
  if(chat){const sid=chat[1];if(method==='GET') return {items:chat[2]==='messages'?(messages[sid]||[]):(changes[sid]||[])};const user={id:`msg-${++sequence}`,session_id:sid,sequence,role:'user',mode:body.mode,content:body.content,created_at:now};const assistant={id:`msg-${++sequence}`,session_id:sid,sequence,role:'assistant',mode:body.mode,content:'【演示回复】可以通过环境细节和人物动作增强悬念，让读者跟随主角逐步发现线索。此回复为预设示例。',created_at:now};messages[sid]=[...(messages[sid]||[]),user,assistant];let change=null;if(body.mode==='editor'||body.quick_action){const session=sessions[sid],n=session.chapterNumber,ch=projects[session.project_id].chapters[n-1],before=drafts[n]?.content||ch.content;const after=before+'\n\n窗外的雨突然停了。她抬起头，看见玻璃上映出一个陌生人的影子。';change={id:`change-${++sequence}`,session_id:sid,message_id:assistant.id,chapter_id:ch.id,operation:'replace',base_version:ch.version,base_draft_hash:drafts[n]?.content_hash||'',before_title:ch.title,before_content:before,after_title:ch.title,after_content:after,diff_json:{sections:[{lines:[{type:'added',text:'窗外的雨突然停了。她抬起头，看见玻璃上映出一个陌生人的影子。'}]}]},explanation:'示例修改：增加一个视觉细节，为下一段制造悬念。',status:'proposed',created_at:now};changes[sid]=[...(changes[sid]||[]),change];}return {user_message:user,assistant_message:assistant,change_set:change};}
 
  if(url==='/api/health') return {mode:'offline',apis:{}};
- if(url==='/api/novels' && method==='GET') return {items:Object.values(projects).map((d:any)=>({...summary,...d.project,audience_channel:d.project.request.audience_channel,genre:d.project.request.genre,chapter_count:d.chapters.length,content_chars:d.chapters.reduce((n:number,c:any)=>n+(c.content||'').length,0)}))};
+ if(url==='/api/novels' && method==='GET') return {items:Object.values(projects).map((d:any)=>({...summary,...d.project,audience_channel:d.project.request.audience_channel,genre:d.project.request.genre,chapter_count:d.chapters.length,content_chars:d.chapters.reduce((n:number,c:any)=>n+countChapterChars(c.content||''),0)}))};
  if(url==='/api/novels/demo' && method==='GET') return detail;
  if(url.endsWith('/opening-repair-snapshots/latest')) return null;
  const match=url.match(/^\/api\/novels\/([^/]+)\/chapters\/(\d+)\/(workspace|edit-draft|revisions)$/);

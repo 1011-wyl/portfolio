@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { demoRequest } from './demo';
+import { countChapterChars } from '@/features/reader/utils/chapter-count';
 
 describe('作品集演示数据', () => {
+  it('示例作品三章均有约两千字的完整正文', async () => {
+    const detail = await demoRequest('/api/novels/demo');
+    expect(detail.chapters).toHaveLength(3);
+    for (const chapter of detail.chapters) {
+      expect(countChapterChars(chapter.content)).toBeGreaterThanOrEqual(1800);
+      expect(countChapterChars(chapter.content)).toBeLessThanOrEqual(2200);
+    }
+  });
   it('为仪表盘的三个页面提供可展示的数据和筛选', async () => {
     const writing = await demoRequest('/api/dashboard/writing?start_at=2000-01-01&end_at=2100-01-01');
     const stats = await demoRequest('/api/dashboard/llm-api/stats');
