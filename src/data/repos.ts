@@ -43,6 +43,7 @@ export const repos: Repo[] = [
     language: 'Python',
     stars: 0,
     url: 'https://github.com/1011-wyl/NovelAI',
+    previewUrl: './novel-agent-demo/',
     techStack: ['Python', 'LangGraph', 'RAG', 'BGE-M3', 'SQLite', 'Vue 3'],
     icon: '✦',
     gradient: 'linear-gradient(135deg, #15122b, #3c276b)',
