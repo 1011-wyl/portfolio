@@ -73,6 +73,7 @@ export const repos: Repo[] = [
     language: 'TypeScript',
     stars: 0,
     url: 'https://github.com/1011-wyl/moomhit',
+    previewUrl: './moonlit-demo/',
     techStack: ['React 19', 'TypeScript', 'DeepSeek', 'State Machine', 'Vitest'],
     icon: '◐',
     gradient: 'linear-gradient(135deg, #10172c, #293e70)',

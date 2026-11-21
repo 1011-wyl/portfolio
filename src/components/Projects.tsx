@@ -290,7 +290,7 @@ function Projects(): JSX.Element {
                           textDecoration: 'none',
                         }}
                       >
-                        <GitHubIcon sx={{ fontSize: 11 }} /> 源码
+                        <GitHubIcon sx={{ fontSize: 11 }} /> {repo.previewUrl ? '点击卡片体验演示' : '源码'}
                       </Box>
                     </Box>
                   </Box>
