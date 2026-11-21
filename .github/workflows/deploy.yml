@@ -32,6 +32,14 @@ jobs:
 
       - run: npm run build
 
+      - run: npm ci
+        working-directory: travelai-demo-src
+
+      - run: npm run build
+        working-directory: travelai-demo-src
+
+      - run: cp -r travelai-demo-src/dist dist/travelai-demo
+
       - uses: actions/configure-pages@v4
 
       - uses: actions/upload-pages-artifact@v3

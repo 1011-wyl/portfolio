@@ -59,6 +59,7 @@ export const repos: Repo[] = [
     language: 'Python',
     stars: 0,
     url: 'https://github.com/1011-wyl/TravelAI',
+    previewUrl: './travelai-demo/',
     techStack: ['FastAPI', 'HelloAgents', 'MCP', 'WebSocket', 'Vue 3', 'ECharts'],
     icon: '⌖',
     gradient: 'linear-gradient(135deg, #0d2430, #325b68)',
