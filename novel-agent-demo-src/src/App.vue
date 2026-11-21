@@ -6,7 +6,7 @@ const app = useAppStore();
 </script>
 
 <template>
-  <div class="demo-banner">作品集演示 · 示例数据，不连接后端或 AI；草稿仅在本次页面会话中保留 <a href="../#projects">返回作品集</a></div>
+  <div class="demo-banner">作品集演示 · 数据和 AI 回复均为模拟；内容仅在本次页面会话中保留 <a href="../#projects">返回作品集</a></div>
   <RouterView />
   <div
     v-if="app.flashMessage"
