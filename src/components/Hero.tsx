@@ -195,13 +195,13 @@ function Hero(): JSX.Element {
 
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Button variant="contained" size="large" endIcon={<KeyboardArrowDownIcon />}
-              href="#timeline"
+              href="#ai-chat"
               sx={{ background: 'linear-gradient(135deg, #8fa4b8, #a8bcc8)', color: '#0a0a0a', fontWeight: 700, px: 4,
                 '&:hover': { background: 'linear-gradient(135deg, #a0b8cc, #b8d0dc)', transform: 'translateY(-2px)', boxShadow: '0 8px 24px rgba(143, 164, 184, 0.30)' },
                 transition: 'all 0.3s ease',
               }}
             >
-              查看产品案例
+              和 AI 聊聊
             </Button>
             <Button variant="outlined" size="large" startIcon={<GitHubIcon />}
               href={githubUser.githubUrl} target="_blank" rel="noopener noreferrer"
