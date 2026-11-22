@@ -2,10 +2,10 @@ import { Box, Container, Typography } from '@mui/material';
 
 const milestones = [
   {
-    time: '2026.07 - 2026.10',
-    title: 'AI 应用开发实习生',
+    time: '2026.07 - 2026.12',
+    title: 'AI 产品实习生',
     place: '厦门修蓁慧进科技有限公司',
-    detail: '参与直播电商复盘系统：基于 LangGraph 搭建主智能体与 5 类业务子智能体，统一 SSE 双通道事件流，并建设 BGE-M3 + BM25 + RRF 商品知识检索与复盘回流闭环。',
+    detail: '围绕 OmniStream 直播电商 AI 复盘工作台，负责商品管理、知识库与智能对话迭代，设计业务流程、SKU 信息管理、来源核对及人工采纳路径，参与联调与交付。',
   },
   {
     time: '2026.02 - 至今',
@@ -17,7 +17,7 @@ const milestones = [
     time: '2023.09 - 2027.06',
     title: '数据科学与大数据技术 · 本科',
     place: '集美大学',
-    detail: '连续 3 年获得专业三等奖学金；第十一届数学统计建模比赛省级二等奖；参与方言智能体科研与大学生创新创业训练计划。',
+    detail: '连续 4 年获得专业三等奖学金；第十一届数学统计建模比赛省级二等奖；参与方言智能体科研与大学生创新创业训练计划。',
   },
 ];
 
@@ -28,8 +28,8 @@ function Experience(): JSX.Element {
         <Box className="reveal" sx={{ display: { md: 'grid' }, gridTemplateColumns: '.72fr 1.28fr', gap: 8 }}>
           <Box>
             <Typography sx={{ color: '#72e0cf', fontFamily: 'monospace', fontSize: '.74rem', letterSpacing: '.12em', mb: 1 }}>BACKGROUND</Typography>
-            <Typography variant="h2" sx={{ fontSize: { xs: '2rem', md: '3rem' }, mb: 2 }}>从数据科学走向 Agent 工程</Typography>
-            <Typography sx={{ color: 'text.secondary', lineHeight: 1.9 }}>学习、实习与独立开发始终围绕一件事：让模型能力进入稳定、可验证的业务流程。</Typography>
+            <Typography variant="h2" sx={{ fontSize: { xs: '2rem', md: '3rem' }, mb: 2 }}>从数据科学走向 AI 产品</Typography>
+            <Typography sx={{ color: 'text.secondary', lineHeight: 1.9 }}>结合数据科学与研发实践，围绕需求拆解、人机协作和交付验证持续完善 AI 产品。</Typography>
           </Box>
           <Box sx={{ mt: { xs: 4, md: 0 }, position: 'relative', '&::before': { content: '""', position: 'absolute', left: 6, top: 10, bottom: 10, width: '1px', bgcolor: 'rgba(114,224,207,.2)' } }}>
             {milestones.map((item) => (

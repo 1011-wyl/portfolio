@@ -5,13 +5,14 @@ import EmailIcon from '@mui/icons-material/Email';
 import CheckIcon from '@mui/icons-material/Check';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import CloseIcon from '@mui/icons-material/Close';
+import PhoneIcon from '@mui/icons-material/Phone';
 import { githubUser } from '../data/repos';
 
 function Contact(): JSX.Element {
   const [copied, setCopied] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  const resumeUrl = `${import.meta.env.BASE_URL}resume-preview.png`;
+  const resumePreviews = ['resume-preview.png', 'resume-preview-2.png'].map((file) => `${import.meta.env.BASE_URL}${file}`);
   const resumePdfUrl = `${import.meta.env.BASE_URL}resume.pdf`;
   const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
@@ -36,16 +37,17 @@ function Contact(): JSX.Element {
     if (isIOS) { window.open(resumePdfUrl, '_blank'); return; }
     try {
       const res = await fetch(resumePdfUrl);
+      if (!res.ok || !res.headers.get('content-type')?.includes('application/pdf')) throw new Error('Resume unavailable');
       const blob = await res.blob();
       const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = blobUrl;
-      a.download = '\u5434\u7130\u73b2-AI\u5e94\u7528\u5f00\u53d1\u5b9e\u4e60\u751f-\u7b80\u5386.pdf';
+      a.download = '吴焰玲-求职AI产品经理-集美大学.pdf';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(blobUrl);
-    } catch { window.open(resumeUrl, '_blank'); }
+    } catch { window.open(resumePdfUrl, '_blank', 'noopener,noreferrer'); }
   };
 
   return (
@@ -59,19 +61,20 @@ function Contact(): JSX.Element {
             <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 2.5 }}>
               <Button variant="contained" size="large" fullWidth startIcon={<PictureAsPdfIcon />} onClick={() => setPreviewOpen(true)} sx={{ py: 2, fontSize: '0.95rem', fontWeight: 700, background: 'linear-gradient(135deg, #8fa4b8, #a8bcc8)', color: '#0a0a0a', borderRadius: 2, '&:hover': { background: 'linear-gradient(135deg, #a0b8cc, #b8d0dc)', transform: 'translateY(-2px)', boxShadow: '0 8px 28px rgba(143, 164, 184, 0.35)' }, transition: 'all 0.3s ease' }}>{'\u9884\u89c8\u7b80\u5386'}</Button>
               <Button variant="outlined" size="large" fullWidth startIcon={<GitHubIcon />} href={githubUser.githubUrl} target="_blank" rel="noopener noreferrer" sx={{ py: 1.5, fontSize: '0.78rem', fontWeight: 600, borderColor: 'rgba(255,255,255,0.06)', color: 'text.primary', borderRadius: 2, fontFamily: '"SF Mono", "Fira Code", monospace', '&:hover': { borderColor: '#8fa4b8', backgroundColor: 'rgba(143, 164, 184, 0.06)', transform: 'translateY(-2px)' }, transition: 'all 0.3s ease' }}>{githubUser.githubUrl}</Button>
+              <Button variant="outlined" size="large" fullWidth startIcon={<PhoneIcon />} href={`tel:${githubUser.phone}`} sx={{ py: 1.5, color: "text.primary", borderColor: "rgba(255,255,255,.1)" }}>{githubUser.phone}</Button>
               <Button variant="outlined" size="large" fullWidth startIcon={copied ? <CheckIcon /> : <EmailIcon />} onClick={handleCopyEmail} sx={{ py: 1.5, fontSize: '0.82rem', fontWeight: 600, borderColor: copied ? 'rgba(62,207,142,0.4)' : 'rgba(255,255,255,0.06)', color: copied ? '#3ecf8e' : 'text.primary', borderRadius: 2, fontFamily: '"SF Mono", "Fira Code", monospace', '&:hover': { borderColor: copied ? '#3ecf8e' : '#8ba8c0', color: copied ? '#3ecf8e' : '#8ba8c0', transform: 'translateY(-2px)' }, transition: 'all 0.3s ease' }}>{copied ? '\u5df2\u590d\u5236' : githubUser.email}</Button>
             </Box>
           </Box>
         </Box>
       </Container>
-      <Modal open={previewOpen} onClose={() => setPreviewOpen(false)} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', p: { xs: 0, sm: 2 } }}>
+      <Modal open={previewOpen} onClose={() => setPreviewOpen(false)} aria-labelledby="resume-preview-title" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', p: { xs: 0, sm: 2 } }}>
         <Box sx={{ position: 'relative', width: '92vw', maxWidth: 480, height: '70vh', backgroundColor: '#111', borderRadius: 3, border: '1px solid rgba(143,164,184,0.15)', boxShadow: '0 16px 48px rgba(0,0,0,0.6)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           <Box sx={{ px: 2, py: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(143,164,184,0.1)', flexShrink: 0, backgroundColor: '#1a1a1e' }}>
-            <Typography sx={{ fontSize: '0.82rem', fontWeight: 600, color: '#e8e0d0' }}>{'\u7b80\u5386\u9884\u89c8'}</Typography>
-            <IconButton onClick={() => setPreviewOpen(false)} size="small" sx={{ color: 'rgba(255,255,255,0.5)' }}><CloseIcon fontSize="small" /></IconButton>
+            <Typography id="resume-preview-title" sx={{ fontSize: '0.82rem', fontWeight: 600, color: '#e8e0d0' }}>AI 产品经理简历 · 2 页</Typography>
+            <IconButton aria-label="关闭简历预览" onClick={() => setPreviewOpen(false)} size="small" sx={{ color: 'rgba(255,255,255,0.5)' }}><CloseIcon fontSize="small" /></IconButton>
           </Box>
-          <Box sx={{ flex: 1, minHeight: 0, overflow: 'hidden', backgroundColor: '#fff' }}>
-            <Box component="img" src={resumeUrl} alt="吴焰玲简历预览" sx={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+          <Box sx={{ flex: 1, minHeight: 0, overflowY: 'auto', backgroundColor: '#e9e9e9' }}>
+            {resumePreviews.map((src, index) => <Box component="img" key={src} src={src} alt={`吴焰玲 AI 产品经理简历第 ${index + 1} 页`} sx={{ width: '100%', height: 'auto', display: 'block', mb: index === 0 ? 1 : 0 }} />)}
           </Box>
           <Box sx={{ px: 2, py: 1, borderTop: '1px solid rgba(143,164,184,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, backgroundColor: '#1a1a1e' }}>
             <Typography sx={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)' }}>{isIOS ? '\u70b9\u51fb\u4e0b\u8f7d\u5728\u65b0\u6807\u7b7e\u9875\u4e2d\u6253\u5f00' : '\u624b\u673a\u7aef\u957f\u6309\u53ef\u4fdd\u5b58'}</Typography>

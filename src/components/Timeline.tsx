@@ -1,198 +1,80 @@
-import { Box, Container, Typography, Chip } from '@mui/material';
+import { Box, Container, Typography, Chip, Accordion, AccordionSummary, AccordionDetails, Button } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SchoolIcon from '@mui/icons-material/School';
-import BuildIcon from '@mui/icons-material/Build';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import TravelExploreIcon from '@mui/icons-material/TravelExplore';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { education } from '../data/repos';
+import { campusExperience, productCases } from '../data/profile';
 
-const projectCards = [
-  {
-    icon: <BuildIcon sx={{ fontSize: 22 }} />,
-    title: '厦门修蓁慧进科技有限公司',
-    role: 'AI 应用开发实习生',
-    period: '2026.07 - 2026.10',
-    subtitle: 'LangGraph · RAG · SSE',
-    description:
-      '面向直播电商复盘与运营迭代，参与搭建“主智能体路由 + 5 类业务子智能体”系统。15 个图节点承载 12 类意图；SSE 与 LangGraph 双事件流统一思考进度、工具调用、文本增量、业务卡片、完成与异常等 8 类事件。知识库采用 BGE-M3 与 BM25 各召回 Top-20，经 RRF 融合输出 Top-8 证据，并形成持续迭代闭环。',
-    techStack: ['Python', 'LangGraph', 'SSE', 'BGE-M3', 'BM25', 'RRF', 'RAG'],
-  },
-  {
-    icon: <SmartToyIcon sx={{ fontSize: 22 }} />,
-    title: 'NovelAI · 自主长篇小说创作 Agent',
-    role: '独立项目',
-    period: '2026.02 - 至今',
-    subtitle: 'LangGraph · BGE-M3 · Vue 3',
-    description:
-      '构建覆盖故事规划、资料检索、正文生成、质量审核、自动修订和长期记忆的 Agent 工作流。通过 LangGraph 编排 4 类模型角色与 7 个生产阶段，支持失败重试、状态追踪和原计划复用；使用 SQLite 管理人物关系、世界规则、时间线与伏笔，并通过 BGE-M3 召回相关章节和资料。',
-    techStack: ['Python', 'LangGraph', 'Pydantic', 'SQLite', 'RAG', 'BGE-M3', 'Vue 3', 'Docker'],
-  },
-  {
-    icon: <TravelExploreIcon sx={{ fontSize: 22 }} />,
-    title: 'TravelAI · 多智能体旅行规划',
-    role: '独立项目',
-    period: '2026',
-    subtitle: 'FastAPI · HelloAgents · MCP · Vue 3',
-    description:
-      '多智能体个性化旅行规划平台，将城市偏好、地图、天气、预算与行程汇总为可编辑、可追问、可导出的逐日计划。通过 MCP 接入外部工具，WebSocket 流式反馈规划过程，并为地图服务设计多级降级策略。',
-    techStack: ['FastAPI', 'HelloAgents', 'MCP', 'WebSocket', 'Vue 3', 'ECharts'],
-  },
-  {
-    icon: <DarkModeIcon sx={{ fontSize: 22 }} />,
-    title: '月下疑局 · 多智能体狼人杀',
-    role: '独立项目',
-    period: '2026',
-    subtitle: 'React 19 · Vinext · DeepSeek',
-    description:
-      '构建本地 12 人文字狼人杀，支持真人玩家与 11 个 AI 在隐藏身份、夜间技能、警长竞选和放逐投票中完成推理博弈。以状态机管理完整规则和角色私有信息，DeepSeek 驱动角色决策；严格 5 秒并发投票窗口对超时或失败自动弃票，并通过阶段快照支持暂停恢复。测试覆盖 100 局规则闭环、信息隔离、角色技能与并发边界。',
-    techStack: ['React 19', 'TypeScript', 'Vinext', 'DeepSeek', 'State Machine', 'Node.js'],
-  },
-  {
-    icon: <PsychologyAltIcon sx={{ fontSize: 22 }} />,
-    title: '心理咨询与诊断平台',
-    role: '全栈项目',
-    period: '2026',
-    subtitle: 'Spring Boot · Vue 2 · MySQL',
-    description:
-      '构建面向用户、咨询师和管理员的前后端分离心理服务平台，覆盖心理评估、咨询预约、报告查看与后台管理。后端基于 Spring Boot 2.7、MyBatis 与 MySQL，使用 JWT 和服务端接口校验隔离三类角色权限；通过唯一约束处理预约时段并发占用，并实现 BCrypt 密码加密与旧 MD5 密码首次登录自动迁移。',
-    techStack: ['Spring Boot', 'Java 8', 'Vue 2', 'MyBatis', 'MySQL', 'JWT', 'BCrypt'],
-  },
-];
+const panelStyle = {
+  p: { xs: 3, md: 4 }, borderRadius: 3,
+  border: '1px solid rgba(143,164,184,0.10)',
+  background: 'rgba(143,164,184,0.04)', backdropFilter: 'blur(12px)',
+};
 
 function Timeline(): JSX.Element {
   return (
-    <Box component="section" id="timeline" sx={{ py: { xs: 6, md: 10 }, }}>
-      <Container maxWidth="md" sx={{ }}>
+    <Box component="section" id="timeline" sx={{ py: { xs: 6, md: 10 } }}>
+      <Container maxWidth="md">
         <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }} className="scroll-title-left">
-          <Typography
-            variant="overline"
-            sx={{ color: '#8ba8c0', fontSize: '0.75rem', letterSpacing: '0.12em', fontFamily: '"SF Mono", "Fira Code", monospace' }}
-          >
-            BACKGROUND
-          </Typography>
-          <Typography variant="h2" sx={{ fontSize: { xs: '1.6rem', md: '2rem' }, fontWeight: 700, mt: 0.5 }}>
-            教育背景 / 项目经历
-          </Typography>
+          <Typography variant="overline" sx={{ color: '#8ba8c0', fontSize: '.75rem', letterSpacing: '.12em', fontFamily: 'monospace' }}>PRODUCT CASES</Typography>
+          <Typography variant="h2" sx={{ fontSize: { xs: '1.6rem', md: '2rem' }, fontWeight: 700, mt: .5 }}>实习与产品案例</Typography>
         </Box>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 4, md: 5 } }}>
-
-          {/* === Education Card === */}
-          <Box className="reveal">
-            <Box
-              sx={{
-                p: { xs: 3, md: 4 },
-                borderRadius: 3,
-                border: '1px solid rgba(143,164,184,0.10)',
-                background: 'rgba(143,164,184,0.04)',
-                backdropFilter: 'blur(12px)',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2.5 }}>
-                <Box
-                  sx={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg, rgba(139,168,192,0.20), rgba(139,168,192,0.08))',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    color: '#8ba8c0',
-                  }}
-                >
-                  <SchoolIcon sx={{ fontSize: 22 }} />
-                </Box>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 2, mb: 0.5, flexWrap: 'wrap' }}>
-                    <Typography sx={{ fontSize: '1.05rem', fontWeight: 700, color: 'text.primary' }}>
-                      {education[0].school}
-                    </Typography>
-                    <Typography sx={{ color: '#8ba8c0', fontFamily: '"SF Mono", "Fira Code", monospace', fontSize: '0.72rem' }}>
-                      {education[0].period}
-                    </Typography>
-                  </Box>
-                  <Typography sx={{ color: '#8fa4b8', fontSize: '0.85rem', fontWeight: 600, mb: 1 }}>
-                    {education[0].degree} · {education[0].major}
-                  </Typography>
-                  {education[0].description && (
-                    <Typography sx={{ color: 'text.secondary', fontSize: '0.8rem', lineHeight: 1.8 }}>
-                      {education[0].description}
-                    </Typography>
-                  )}
-                </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 3, md: 4 } }}>
+          {productCases.map((item) => (
+            <Box key={item.id} id={`case-${item.id}`} className="reveal" sx={panelStyle}>
+              <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 1.5, flexWrap: 'wrap', mb: 1 }}>
+                <Typography variant="h3" sx={{ fontSize: { xs: '1.05rem', md: '1.2rem' }, fontWeight: 700 }}>{item.name}</Typography>
+                <Typography sx={{ fontSize: '.75rem', fontFamily: 'monospace', color: '#8ba8c0' }}>{item.period}</Typography>
               </Box>
-            </Box>
-          </Box>
-
-          {/* === Project Experience Cards === */}
-          {projectCards.map((card) => (
-            <Box key={card.title} className="reveal">
-              <Box
-                sx={{
-                  p: { xs: 3, md: 4 },
-                  borderRadius: 3,
-                  border: '1px solid rgba(143,164,184,0.10)',
-                  background: 'rgba(143,164,184,0.04)',
-                  backdropFilter: 'blur(12px)',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2.5 }}>
-                  <Box
-                    sx={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 2,
-                      background: 'linear-gradient(135deg, rgba(139,168,192,0.20), rgba(139,168,192,0.08))',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      color: '#8ba8c0',
-                    }}
-                  >
-                    {card.icon}
-                  </Box>
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 2, mb: 0.5, flexWrap: 'wrap' }}>
-                      <Typography sx={{ fontSize: '1.05rem', fontWeight: 700, color: 'text.primary' }}>
-                        {card.title}
-                      </Typography>
-                      <Typography sx={{ color: '#8ba8c0', fontFamily: '"SF Mono", "Fira Code", monospace', fontSize: '0.72rem' }}>
-                        {card.period}
-                      </Typography>
-                    </Box>
-                    <Typography sx={{ color: '#8fa4b8', fontSize: '0.85rem', fontWeight: 600, mb: 1 }}>
-                      {card.role}
-                    </Typography>
-                    <Typography sx={{ color: 'text.secondary', fontSize: '0.8rem', lineHeight: 1.8, mb: 2 }}>
-                      {card.description}
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.8 }}>
-                      {card.techStack.map((tech) => (
-                        <Chip
-                          key={tech}
-                          label={tech}
-                          size="small"
-                          sx={{
-                            backgroundColor: 'rgba(143,164,184,0.08)',
-                            color: '#a0b8cc',
-                            border: '1px solid rgba(143,164,184,0.15)',
-                            fontWeight: 600,
-                            fontSize: '0.65rem',
-                            height: 22,
-                          }}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
-                </Box>
+              <Typography sx={{ fontSize: '.85rem', color: '#a0b8cc', mb: 2 }}>{item.role}</Typography>
+              <Typography sx={{ fontSize: '.9rem', color: 'text.secondary', lineHeight: 1.9, mb: 2 }}>{item.context}</Typography>
+              <Typography sx={{ fontSize: '.86rem', color: 'text.secondary', lineHeight: 1.9, mb: 2 }}>
+                <Box component="strong" sx={{ color: 'text.primary' }}>用户问题：</Box>{item.problem}
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: .8, mb: 1.5 }}>
+                {item.tags.map((tag) => <Chip key={tag} label={tag} size="small" sx={{ bgcolor: 'rgba(143,164,184,.08)', color: '#a0b8cc', border: '1px solid rgba(143,164,184,.15)', fontSize: '.7rem' }} />)}
               </Box>
+              <Accordion disableGutters elevation={0} sx={{ bgcolor: 'transparent', color: 'text.primary', backgroundImage: 'none', '&::before': { display: 'none' }, borderTop: '1px solid rgba(143,164,184,.12)' }}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#a0b8cc' }} />} id={`${item.id}-summary`} aria-controls={`${item.id}-details`} sx={{ px: 0, minHeight: 48, '& .MuiAccordionSummary-content': { my: 1 } }}>
+                  <Typography sx={{ fontSize: '.85rem', fontWeight: 600 }}>查看设计方案与交付</Typography>
+                </AccordionSummary>
+                <AccordionDetails id={`${item.id}-details`} sx={{ px: 0, pb: 0 }}>
+                  <Box sx={{ display: 'grid', gap: 2.5 }}>
+                    {item.decisions.map((decision) => (
+                      <Box key={decision.title}>
+                        <Typography component="h4" variant="body1" sx={{ fontSize: '.9rem', fontWeight: 600, mb: .6 }}>{decision.title}</Typography>
+                        <Typography sx={{ fontSize: '.86rem', color: 'text.secondary', lineHeight: 1.9 }}>{decision.detail}</Typography>
+                      </Box>
+                    ))}
+                    <Box>
+                      <Typography component="h4" variant="body1" sx={{ fontSize: '.9rem', fontWeight: 600, mb: .6 }}>交付与验证</Typography>
+                      <Typography sx={{ fontSize: '.86rem', color: 'text.secondary', lineHeight: 1.9 }}>{item.delivery}</Typography>
+                    </Box>
+                    {(item.previewUrl || item.sourceUrl) && <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
+                      {item.previewUrl && <Button variant="outlined" size="small" href={item.previewUrl} target="_blank" rel="noopener noreferrer" endIcon={<OpenInNewIcon />}>体验交互演示</Button>}
+                      {item.sourceUrl && <Button size="small" href={item.sourceUrl} target="_blank" rel="noopener noreferrer">查看项目仓库</Button>}
+                    </Box>}
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
             </Box>
           ))}
-
+          <Box className="reveal" sx={panelStyle}>
+            <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', mb: 1.5 }}>
+              <SchoolIcon sx={{ color: '#8ba8c0' }} />
+              <Typography variant="h3" sx={{ fontSize: '1.15rem', fontWeight: 700 }}>教育与在校经历</Typography>
+            </Box>
+            <Typography sx={{ fontWeight: 600, mb: .5 }}>{education[0].school} · {education[0].major} · {education[0].degree}</Typography>
+            <Typography sx={{ fontFamily: 'monospace', fontSize: '.75rem', color: '#8ba8c0', mb: 1.5 }}>{education[0].period}</Typography>
+            <Typography sx={{ fontSize: '.86rem', color: 'text.secondary', lineHeight: 1.9 }}>{education[0].description}</Typography>
+            <Box sx={{ display: 'grid', gap: 2.5, mt: 3 }}>
+              {campusExperience.map((item) => <Box key={item.title}>
+                <Typography sx={{ fontSize: '.9rem', fontWeight: 600 }}>{item.title}</Typography>
+                <Typography sx={{ fontSize: '.75rem', color: '#8ba8c0', my: .5 }}>{item.role}</Typography>
+                <Typography sx={{ fontSize: '.86rem', color: 'text.secondary', lineHeight: 1.9 }}>{item.detail}</Typography>
+              </Box>)}
+            </Box>
+          </Box>
         </Box>
       </Container>
     </Box>

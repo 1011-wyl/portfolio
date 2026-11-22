@@ -2,22 +2,22 @@ import { Box, Container, Typography } from '@mui/material';
 
 const highlights = [
   {
-    num: '15',
-    unit: '个',
-    label: 'LangGraph 图节点',
-    desc: '主智能体路由 5 类业务子智能体',
-  },
-  {
-    num: '12',
-    unit: '类',
-    label: '业务意图覆盖',
-    desc: '规则、上下文与模型分类协同判断',
-  },
-  {
-    num: 'Top-8',
+    num: '30+',
     unit: '',
-    label: '融合检索证据',
-    desc: 'BGE-M3 + BM25 Top-20，RRF 融合',
+    label: '业务字段与状态梳理',
+    desc: 'OmniStream：支持产研测对齐流程',
+  },
+  {
+    num: '8',
+    unit: '维',
+    label: '内容质量检查',
+    desc: 'NovelAI：结合跨章记忆与人工修订',
+  },
+  {
+    num: '6',
+    unit: '区',
+    label: '旅行结果呈现',
+    desc: 'TravelAI：检查方案、编辑并带走结果',
   },
 ];
 
@@ -53,7 +53,7 @@ function WhyMe(): JSX.Element {
               color: '#e8e0d0',
             }}
           >
-            用项目指标说明能力
+            把产品方案落实为具体机制
           </Typography>
         </Box>
 

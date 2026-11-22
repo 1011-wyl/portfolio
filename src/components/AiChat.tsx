@@ -1,43 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Box, Typography, IconButton, TextField, CircularProgress } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { QUICK_PROMPTS, answerFor } from '../data/productChat';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
-}
-
-const QUICK_PROMPTS = [
-  { label: '最有挑战的项目', prompt: '你做过的项目里，技术上最有挑战的是哪个？难在哪？' },
-  { label: '为什么选 AI 方向', prompt: '你为什么选择 AI 应用开发作为求职方向？' },
-  { label: '一个人怎么做的', prompt: '这些项目是你一个人完成的吗？遇到不会的技术怎么解决？' },
-  { label: '成本控制', prompt: '你的项目在 API 调用和部署上怎么控制成本的？' },
-  { label: '和别人有什么不同', prompt: '跟同届应届生比，你觉得自己最大的优势是什么？' },
-];
-
-const ANSWERS = {
-  challenge:
-    '目前最有挑战的是 NovelAI。长篇生成并不是一次提示词调用，而是要同时处理跨章节一致性、世界规则、人物关系、伏笔和失败恢复。我用 LangGraph 把规划、写作、审核、修订拆成 7 个阶段，由 4 类模型角色协作；再用 SQLite 保存结构化长期记忆，并通过 BGE-M3 召回相关章节与资料。这样每一步都能追踪、重试，也能保留人工审批。',
-  direction:
-    '我喜欢把模型能力变成真正可使用的产品。在实习里，我参与了主智能体路由与 5 类业务子智能体的系统开发，15 个图节点承载 12 类意图；项目里也持续实践 Agent、RAG、SSE / WebSocket 与全栈交付。相比只做模型调用，我更关注任务编排、状态恢复、证据质量和用户体验。',
-  ownership:
-    'NovelAI、TravelAI、月下疑局和心理咨询平台都是我持续主导开发的项目。我会先把业务目标拆成可验证的小闭环，再查阅官方文档、复现最小样例并补测试。遇到不熟悉的技术时，我会记录假设、做对照实验，并用日志和回归用例确认方案不是“碰巧能跑”。',
-  cost:
-    '我会把成本控制放进架构里：优先用规则和上下文完成明确判断，再把真正需要语义理解的任务交给模型；对检索结果先做融合与裁剪，只把 Top-8 高价值证据送入上下文；长任务采用流式反馈、检查点和失败恢复，避免断线或重试导致整条链路重复消耗。',
-  advantage:
-    '我的优势是把 AI 能力、后端工程和前端体验放在同一个交付闭环里。实习中做过 LangGraph 多智能体与双事件流，个人项目覆盖 RAG、知识图谱、状态机和全栈系统；同时连续三年获专业三等奖学金，并获数学统计建模省级二等奖。我希望用这些经历证明自己不只会做 Demo，也能处理真实系统里的状态、质量和异常。',
-  default:
-    '你可以问我关于 NovelAI、TravelAI、月下疑局、心理咨询平台、LangGraph、RAG、实习经历或求职方向的问题。这个公开版本使用基于简历事实的本地回答，不会上传你的输入。',
-};
-
-function answerFor(question: string): string {
-  const q = question.toLowerCase();
-  if (q.includes('挑战') || q.includes('novel') || q.includes('小说')) return ANSWERS.challenge;
-  if (q.includes('为什么') || q.includes('方向') || q.includes('ai')) return ANSWERS.direction;
-  if (q.includes('一个人') || q.includes('独立') || q.includes('不会')) return ANSWERS.ownership;
-  if (q.includes('成本') || q.includes('api') || q.includes('部署')) return ANSWERS.cost;
-  if (q.includes('优势') || q.includes('不同') || q.includes('同届')) return ANSWERS.advantage;
-  return ANSWERS.default;
 }
 
 function AiChat(): JSX.Element {
@@ -147,7 +115,7 @@ function AiChat(): JSX.Element {
               fontWeight: 600,
             }}
           >
-            AI CHAT
+            PROJECT Q&A
           </Typography>
           <Typography
             sx={{
@@ -157,7 +125,7 @@ function AiChat(): JSX.Element {
               lineHeight: 1.3,
             }}
           >
-            AI 对话
+            项目问答
           </Typography>
         </Box>
 
@@ -203,7 +171,7 @@ function AiChat(): JSX.Element {
                     letterSpacing: '-0.01em',
                   }}
                 >
-                  你好，随便问
+                  聊聊我的产品实践
                 </Typography>
                 <Typography
                   sx={{
@@ -212,8 +180,9 @@ function AiChat(): JSX.Element {
                     lineHeight: 1.6,
                   }}
                 >
-                  关于项目经历、技术选型与求职方向
+                  关于产品决策、实习职责、质量与成本
                 </Typography>
+                <Typography sx={{ fontSize: ".72rem", color: "text.secondary", mt: 1 }}>基于简历的预设问答 · 输入仅在当前页面处理</Typography>
               </Box>
 
               {/* Prompt cards — 2-column grid, clearly interactive */}
@@ -416,6 +385,7 @@ function AiChat(): JSX.Element {
           }}
         >
           <TextField
+            inputProps={{ 'aria-label': '输入项目问题' }}
             fullWidth
             multiline
             maxRows={3}
@@ -449,6 +419,7 @@ function AiChat(): JSX.Element {
             }}
           />
           <IconButton
+            aria-label="发送问题"
             onClick={() => sendMessage()}
             disabled={loading || !input.trim()}
             sx={{

@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { Box, Container, Typography, Button, Chip, Stack } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { githubUser, repos } from '../data/repos';
+import { githubUser } from '../data/repos';
 
 const name = githubUser.displayName;
-const chineseName = '吴焰玲';
-const tagline = 'AI 应用开发 · Agent 编排 · RAG';
+const chineseName = 'AI 产品经理';
+const tagline = githubUser.tagline;
 const jobTarget = githubUser.jobTarget;
-const tags = ['LangGraph', 'RAG', '多智能体系统'];
+const tags = ['业务流程设计', 'Agent / RAG', '可交互原型'];
 
 function Hero(): JSX.Element {
   const [nameText, setNameText] = useState('');
@@ -164,7 +164,7 @@ function Hero(): JSX.Element {
               letterSpacing: '0.03em',
             }}
           >
-            {repos.length} 个项目 · 1 段 AI 实习 · 持续交付
+            直播电商实习 · 2 个核心 AI 产品项目
           </Typography>
 
           <Box
@@ -195,13 +195,13 @@ function Hero(): JSX.Element {
 
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Button variant="contained" size="large" endIcon={<KeyboardArrowDownIcon />}
-              href="#ai-chat"
+              href="#timeline"
               sx={{ background: 'linear-gradient(135deg, #8fa4b8, #a8bcc8)', color: '#0a0a0a', fontWeight: 700, px: 4,
                 '&:hover': { background: 'linear-gradient(135deg, #a0b8cc, #b8d0dc)', transform: 'translateY(-2px)', boxShadow: '0 8px 24px rgba(143, 164, 184, 0.30)' },
                 transition: 'all 0.3s ease',
               }}
             >
-              和 AI 聊聊
+              查看产品案例
             </Button>
             <Button variant="outlined" size="large" startIcon={<GitHubIcon />}
               href={githubUser.githubUrl} target="_blank" rel="noopener noreferrer"
@@ -224,7 +224,7 @@ function Hero(): JSX.Element {
         animation: allDone ? 'float 2s ease-in-out infinite' : 'none',
         cursor: 'pointer',
       }}
-        onClick={() => document.getElementById('ai-chat')?.scrollIntoView({ behavior: 'smooth' })}
+        onClick={() => document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth' })}
       >
         <KeyboardArrowDownIcon sx={{ fontSize: 32, color: 'rgba(255,255,255,0.35)' }} />
       </Box>

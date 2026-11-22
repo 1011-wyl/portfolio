@@ -3,18 +3,18 @@ import { Box, Container, Typography, Grid2 as Grid } from '@mui/material';
 const directions = [
   {
     num: '01',
-    title: 'Agent 系统开发',
-    desc: '使用 LangGraph 设计主智能体路由、业务子智能体、状态检查点与人工审核，能把复杂任务拆成可观测的工作流。',
+    title: '需求与流程拆解',
+    desc: '从直播运营、长篇创作和旅行规划的任务出发，梳理功能边界、用户路径与异常状态，输出产品方案与操作说明。',
   },
   {
     num: '02',
-    title: 'RAG 与知识工程',
-    desc: '实践 BGE-M3、BM25、RRF 融合检索、长期记忆与知识图谱，重视引用溯源、质量检查和持续更新。',
+    title: 'AI 质量与能力边界',
+    desc: '理解 Agent、RAG、Prompt 与知识管理的应用方式，结合来源核对、人工采纳、一致性检查与调用上限约束生成过程。',
   },
   {
     num: '03',
-    title: '全栈产品交付',
-    desc: 'Python + TypeScript / Java 双栈实践，覆盖 FastAPI、Vue、React、Spring Boot、数据库设计、测试与部署。',
+    title: '原型与交付验证',
+    desc: '使用 Xmind、流程图和交互说明表达方案，也能直接制作高保真前端原型；结合 Python、SQL 与接口知识参与联调和验收。',
   },
 ];
 
@@ -40,19 +40,19 @@ function About(): JSX.Element {
                   mb: 2,
                 }}
               >
-                Agent 编排
+                从用户任务出发
                 <Box component="span" sx={{ background: 'linear-gradient(135deg, #8fa4b8, #a8bcc8)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  {' '}· 工程落地
+                  {' '}做出可用的 AI 产品
                 </Box>
               </Typography>
               <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '0.92rem', lineHeight: 1.9, mb: 2 }}>
-                集美大学数据科学与大数据技术专业，2027 届本科生，目标岗位为 AI 应用开发实习生。持续开发 NovelAI、TravelAI、多智能体游戏与心理咨询平台等项目。
+                集美大学数据科学与大数据技术专业本科生，求职方向为 AI 产品经理。以 OmniStream 实习、NovelAI 和 TravelAI 为主要案例，展示业务流程、人机协作与体验完善方面的实践。
               </Typography>
               <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '0.92rem', lineHeight: 1.9, mb: 2 }}>
-                在 AI 应用开发实习中，基于 LangGraph 搭建主智能体与 5 类业务子智能体，通过 15 个图节点承载 12 类意图，并用 SSE / LangGraph 双事件流统一 8 类运行事件。
+                实习中负责商品管理、知识库与智能对话模块迭代，关注商品事实、SKU 信息和 AI 生成结果之间的关系。个人项目中，从流程设计继续推进到可交互页面、功能实现和验证。
               </Typography>
               <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '0.92rem', lineHeight: 1.9 }}>
-                在知识库链路中使用 BGE-M3 与 BM25 各召回 Top-20，再通过 RRF 融合输出 Top-8 证据。连续三年获专业三等奖学金，并获数学统计建模省级二等奖。
+                熟悉 Python、LangGraph、SQL，了解 SSE 与 WebSocket 等协作机制，能与研发讨论技术边界和异常处理。连续 4 年获专业三等奖学金，获数学统计建模比赛省级二等奖。
               </Typography>
             </Box>
           </Grid>
@@ -88,8 +88,8 @@ function About(): JSX.Element {
                 <Typography variant="body2" sx={{ position: 'relative', zIndex: 1, color: '#8ba8c0', fontFamily: '"SF Mono", "Fira Code", monospace', fontSize: '0.7rem', mb: 0.5 }}>
                   PHILOSOPHY
                 </Typography>
-                <Typography variant="h4" sx={{ position: 'relative', zIndex: 1, fontSize: '1rem', fontWeight: 600, color: 'text.primary', lineHeight: 1.7 }}>
-                  让模型能力进入可追踪、可恢复、可验证的工程流程
+                <Typography component="h4" variant="body1" sx={{ position: 'relative', zIndex: 1, fontSize: '1rem', fontWeight: 600, color: 'text.primary', lineHeight: 1.7 }}>
+                  让用户看懂过程、控制修改，并完成实际任务
                 </Typography>
               </Box>
 
@@ -126,7 +126,7 @@ function About(): JSX.Element {
                     <Typography variant="body2" sx={{ color: '#8ba8c0', fontFamily: 'monospace', fontSize: '0.75rem', mb: 1 }}>
                       {dir.num}
                     </Typography>
-                    <Typography variant="h4" sx={{ fontSize: '1rem', fontWeight: 600, mb: 1, color: 'text.primary' }}>
+                    <Typography component="h4" variant="body1" sx={{ fontSize: '1rem', fontWeight: 600, mb: 1, color: 'text.primary' }}>
                       {dir.title}
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.8rem', lineHeight: 1.7 }}>

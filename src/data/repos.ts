@@ -28,39 +28,39 @@ export const education: Education[] = [
     major: '数据科学与大数据技术',
     period: '2023.09 - 2027.06',
     description:
-      '主修机器学习、数据结构、Python 程序设计、Java 程序设计、Web 程序设计与数据可视化。连续三年获专业三等奖学金，获第十一届数学统计建模比赛省级二等奖，通过 CET-4。',
+      '主修机器学习、数据可视化、数据结构、Python 程序设计、计算机网络等。连续 4 年获专业三等奖学金，获第十一届数学统计建模比赛省级二等奖，通过 CET-4。',
   },
 ];
 
 export const repos: Repo[] = [
   {
     name: 'NovelAI',
-    displayName: 'NovelAI · 长篇小说创作 Agent',
+    displayName: 'NovelAI · 长篇小说创作智能体',
     description:
-      '从故事规划、联网调研到正文生成、质量审核、自动修订与长期记忆的自主长篇小说创作系统。',
+      '让创作者确认方案、逐章生成并审核修改，以草稿、正式版本和长期记忆管理持续创作。',
     rationale:
-      '[Agent 系统] 通过 LangGraph 编排规划、写作、审核、修订等 4 类模型角色，将章节生产拆成 7 个可追踪阶段；SQLite 管理人物关系、世界规则、时间线与伏笔，BGE-M3 召回相关章节和研究资料，并提供失败重试、状态恢复与人工审批。',
+      '将创作拆为 6 个步骤，设计差异预览、人工批准和正式提交路径；通过 8 维质量检查、跨章一致性审核与用量仪表盘管理质量和成本。',
     language: 'Python',
     stars: 0,
     url: 'https://github.com/1011-wyl/NovelAI',
     previewUrl: './novel-agent-demo/',
-    techStack: ['Python', 'LangGraph', 'RAG', 'BGE-M3', 'SQLite', 'Vue 3'],
+    techStack: ['创作流程', '人机协作', '版本管理', '质量审核'],
     icon: '✦',
     gradient: 'linear-gradient(135deg, #15122b, #3c276b)',
     image: '/projects/1011-wyl/novelai.png',
   },
   {
     name: 'TravelAI',
-    displayName: 'TravelAI · 多智能体旅行规划',
+    displayName: 'TravelAI · 旅行规划助手',
     description:
       '把城市偏好、地图、天气、预算与行程组织成可编辑、可追问、可导出的逐日旅行计划。',
     rationale:
-      '[多智能体应用] 以 FastAPI + HelloAgents 协调目的地、路线、预算等智能体，通过 MCP 接入外部能力，使用 WebSocket 流式展示规划过程。地图服务提供多级降级，结构化结果可继续追问和调整。',
+      '基于开源项目二次开发，重点进行规划体验重设计、预算与行程编辑联动、地图服务回退，并验证规划到导出的完整流程。',
     language: 'Python',
     stars: 0,
     url: 'https://github.com/1011-wyl/TravelAI',
     previewUrl: './travelai-demo/',
-    techStack: ['FastAPI', 'HelloAgents', 'MCP', 'WebSocket', 'Vue 3', 'ECharts'],
+    techStack: ['规划体验', '编辑联动', '异常兜底', '结果复用'],
     icon: '⌖',
     gradient: 'linear-gradient(135deg, #0d2430, #325b68)',
     image: '/projects/1011-wyl/travelai.png',
@@ -99,13 +99,14 @@ export const repos: Repo[] = [
 
 export const githubUser = {
   username: '1011-wyl',
-  displayName: 'Yanling Wu',
+  displayName: '吴焰玲',
   avatarUrl: 'https://avatars.githubusercontent.com/1011-wyl',
-  bio: '集美大学数据科学与大数据技术专业 · AI 应用开发 · Agent 与 RAG 系统',
-  tagline: 'AI 应用开发 · Agent 编排 · RAG',
+  bio: '集美大学数据科学与大数据技术专业 · AI 产品经理 · 需求、交互与交付',
+  tagline: '需求拆解 · 人机协作 · AI 产品落地',
   githubUrl: 'https://github.com/1011-wyl',
   email: '2900818501@qq.com',
-  jobTarget: 'AI 应用开发实习生 · 2027 届',
+  phone: '15260485095',
+  jobTarget: '求职方向：AI 产品经理',
   resumeUrl: '/resume.pdf',
 };
 
