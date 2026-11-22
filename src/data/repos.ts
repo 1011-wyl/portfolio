@@ -11,6 +11,7 @@ export interface Repo {
   icon: string;
   gradient: string;
   image?: string;
+  imageAlt?: string;
 }
 
 export interface Education {
@@ -47,7 +48,8 @@ export const repos: Repo[] = [
     techStack: ['创作流程', '人机协作', '版本管理', '质量审核'],
     icon: '✦',
     gradient: 'linear-gradient(135deg, #15122b, #3c276b)',
-    image: '/projects/1011-wyl/novelai.png',
+    image: '/projects/1011-wyl/novelai-mobile-workbench.png',
+    imageAlt: 'NovelAI 创作工作台手机展示：创作方案、章节生成与章节储备',
   },
   {
     name: 'TravelAI',
@@ -63,7 +65,8 @@ export const repos: Repo[] = [
     techStack: ['规划体验', '编辑联动', '异常兜底', '结果复用'],
     icon: '⌖',
     gradient: 'linear-gradient(135deg, #0d2430, #325b68)',
-    image: '/projects/1011-wyl/travelai.png',
+    image: '/projects/1011-wyl/travelai-mobile-itinerary.png',
+    imageAlt: 'TravelAI 手机行程展示：厦门三日游、预算和每日行程',
   },
   {
     name: 'moomhit',

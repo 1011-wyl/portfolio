@@ -171,7 +171,7 @@ function Projects(): JSX.Element {
                         <Box
                           component="img"
                           src={assetUrl(repo.image)}
-                          alt={repo.displayName}
+                          alt={repo.imageAlt || repo.displayName}
                           sx={{
                             width: '100%',
                             height: '100%',

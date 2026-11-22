@@ -1,0 +1,24 @@
+{
+  "purpose": "作品集中的产品核心界面手机展示图",
+  "method": "在浏览器中运行仓库已有的产品演示，使用手机视口和展示用 CSS 排版后截图。",
+  "viewport": { "width": 414, "height": 736, "deviceScaleFactor": 2 },
+  "outputDimensions": { "width": 828, "height": 1472 },
+  "data": "均为现有公开演示中的预设样本，不代表真实用户或经营数据。",
+  "assets": [
+    {
+      "path": "public/projects/1011-wyl/novelai-mobile-workbench.png",
+      "source": "public/novel-agent-demo/#/novels/demo/workbench",
+      "view": "雾岛来信创作工作台",
+      "visibleFeatures": ["创作方案", "生成下一章", "章节数量", "章节储备"],
+      "presentationAdjustments": ["隐藏作品集演示横幅与技术状态", "将概览指标排为手机三列布局", "压缩间距", "突出章节储备，隐藏空的流程日志区与危险操作"]
+    },
+    {
+      "path": "public/projects/1011-wyl/travelai-mobile-itinerary.png",
+      "source": "travelai-demo-src 演示行程 /#/result?section=itinerary",
+      "view": "厦门三日游每日行程",
+      "visibleFeatures": ["行程摘要", "天数与预算", "六个结果分区", "每日行程", "编辑与导出入口"],
+      "presentationAdjustments": ["省略纯装饰地图空白", "将六个分区排为手机两行导航", "压缩间距并保持顶部完整显示"]
+    }
+  ],
+  "scope": "展示用排版仅用于作品集图片；核心数据和操作名称取自现有演示。"
+}
