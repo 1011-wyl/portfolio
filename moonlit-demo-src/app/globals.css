@@ -1,0 +1,122 @@
+@import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: dark;
+  --background: #090e17;
+  --foreground: #eaecef;
+  --primary: #c9b37e;
+  --primary-foreground: #0c121d;
+  --border: rgba(148, 163, 184, 0.16);
+  --ring: #c9b37e;
+  --radius: 0.75rem;
+  --muted: #141e2e;
+  --muted-foreground: #96a4b8;
+  --accent: #1d293d;
+  --accent-foreground: #f4f6f8;
+  --popover: #111927;
+  --popover-foreground: #eaecef;
+  --input: #1b2638;
+  --card: #111927;
+  --card-foreground: #eaecef;
+  --secondary: #192436;
+  --secondary-foreground: #eaecef;
+  --destructive: #b8545c;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #060a12;
+  color: var(--foreground);
+  font-family:
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui,
+    -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  overscroll-behavior-y: contain;
+}
+
+.font-display {
+  font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', Georgia, serif;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.portrait-sprite {
+  background-image: url('/portraits.png');
+  background-size: 300% 300%;
+  background-color: #162235;
+}
+
+.pb-safe {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* 隐藏移动端横向滚动条，保持触控滑动流畅 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 精简滚动条 */
+.thin-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 9999px;
+}
+
+@keyframes cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.type-cursor {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-sheet-up {
+  animation: sheet-up 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

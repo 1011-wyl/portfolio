@@ -18,6 +18,14 @@
       "view": "厦门三日游每日行程",
       "visibleFeatures": ["行程摘要", "天数与预算", "六个结果分区", "每日行程", "编辑与导出入口"],
       "presentationAdjustments": ["省略纯装饰地图空白", "将六个分区排为手机两行导航", "压缩间距并保持顶部完整显示"]
+    },
+    {
+      "path": "public/projects/1011-wyl/moonlit-mobile-lobby.png",
+      "source": "moonlit-demo-src，构建至 public/moonlit-demo/",
+      "view": "月下疑局移动端大厅",
+      "visibleFeatures": ["月夜村庄主视觉", "十二人镜隐迷踪", "进入对局配置", "角色档案", "村庄规则", "底部导航"],
+      "presentationAdjustments": [],
+      "note": "新版演示在 414×736 手机视口的原生截图，未注入展示 CSS。"
     }
   ],
   "scope": "展示用排版仅用于作品集图片；核心数据和操作名称取自现有演示。"

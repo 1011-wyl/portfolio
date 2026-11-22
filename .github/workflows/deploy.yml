@@ -32,6 +32,15 @@ jobs:
         env:
           PUPPETEER_SKIP_DOWNLOAD: true
 
+      - run: npm ci
+        working-directory: moonlit-demo-src
+
+      - run: npm test
+        working-directory: moonlit-demo-src
+
+      - run: npm run build
+        working-directory: moonlit-demo-src
+
       - run: npm run build
 
       - run: npm ci

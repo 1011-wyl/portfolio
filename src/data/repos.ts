@@ -82,7 +82,8 @@ export const repos: Repo[] = [
     techStack: ['React 19', 'TypeScript', 'DeepSeek', 'State Machine', 'Vitest'],
     icon: '◐',
     gradient: 'linear-gradient(135deg, #10172c, #293e70)',
-    image: '/projects/1011-wyl/moomhit.png',
+    image: '/projects/1011-wyl/moonlit-mobile-lobby.png',
+    imageAlt: '月下疑局手机大厅：十二人镜隐迷踪、角色档案与对局配置',
   },
   {
     name: 'psychology_system',
