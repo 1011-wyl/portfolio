@@ -1,79 +1,146 @@
 import { ApiError } from './api-error';
 import tags from './demo-tags.json';
 import sampleChapters from './demo-chapters.json';
+import type { ProjectDetail, ChapterRecord, CreativeBrief } from './contracts';
 import { countChapterChars } from '@/features/reader/utils/chapter-count';
-const now = '2026-10-02T12:00:00';
-const project = { id:'demo', title:'雾岛来信', status:'ACTIVE', confirmed:true, current_chapter:3, created_at:now, updated_at:now,
- request:{audience_channel:'女频',genre:'悬疑',preferred_title:'雾岛来信',experiences:['悬疑探秘'],elements:['旧日谜团'],protagonist_tags:[],romance:null,idea:'一封迟到七年的信，揭开一座岛的秘密。',must_have:[],nice_to_have:[],exclude:[],chapter_target_chars:2200,daily_chapters:1,reserve_target:5,require_plan_confirmation:true},
- brief:{selected_title:'雾岛来信',title_candidates:['雾岛来信'],synopsis:'七年前，一座岛与一群人共同消失。如今，一封来自失踪者的信打破了林见微平静的生活。她必须在记忆与现实的裂缝中，找到被隐藏的真相。',target_readers:'喜欢悬疑与人物故事的读者',selling_points:['旧日谜团','失踪者来信'],protagonist:'林见微',protagonist_name:'林见微',protagonist_profile:'旧书店店主，谨慎而敏锐。',main_conflict:'追寻失踪的父亲与雾岛的真相',reader_contract:'循序揭开谜团',core_expectation:'悬疑与情感并行',world_rules:['雾岛从公开地图上消失'],total_chapters:100,volume_count:4,opening_three_chapters:['雨夜收到来信','地下室的灯亮起','一张地图出现'],update_plan:'每日一章',style_guide:['细节中埋设悬念']} };
-const summaries = [
- '旧书店主林见微收到一封疑似失踪父亲寄来的信，地下室传出不明声音。',
- '地下室在断电后亮起灯光，见微追查暗道，听见童年与父亲约定的暗号。',
- '一张雾岛地图揭开十七号观测站的线索，见微决定前往东堤寻找真相。',
-];
-const chapters = sampleChapters.map(([title,content],i)=>({id:`chapter-${i+1}`,number:i+1,title,content,summary:summaries[i],status:'READY',version:1,created_at:now}));
-const detail={project,chapters,latest_events:[],characters:[{id:'c1',name:'林见微',role:'主角',immutable_facts:['旧书店店主'],current_state:{目标:'寻找父亲失踪的真相',位置:'旧书店'}},{id:'c2',name:'林远山',role:'重要人物',immutable_facts:['林见微的父亲','七年前失踪'],current_state:{状态:'失踪'}}],world_facts:[{category:'地点',statement:'雾岛从公开地图上消失',locked:true}],timeline:[{chapter_number:1,event:'林见微收到父亲的信'},{chapter_number:2,event:'地下室亮灯，见微发现暗道和父亲留下的暗号'},{chapter_number:3,event:'见微找到雾岛地图与钥匙，决定调查东堤'}],research_sources:[],semantic_document_count:0,reserve_count:3,chapter_failures:[]};
-const summary={...project,audience_channel:'女频',genre:'悬疑',chapter_count:3,content_chars:chapters.reduce((n,c)=>n+countChapterChars(c.content),0)};
-let drafts: Record<number, any> = {};
-const projects: Record<string, any> = { demo: detail };
-let preferences: any = {daily_chapters:2,reserve_target:5,budget_limit:0,debug_mode:false};
-let llmView: any = {provider:'deepseek',provider_label:'DeepSeek（示例）',base_url:'https://api.deepseek.com',model:'deepseek-chat',enabled:false,has_api_key:false,api_key_mask:null,verification_status:'unverified',last_tested_at:null,last_error_code:null,source:'offline',version:1,timeout_seconds:120,max_retries:2,card_status:'unconfigured',presets:[{provider:'deepseek',provider_label:'DeepSeek',base_url:'https://api.deepseek.com',model:'deepseek-chat'},{provider:'dashscope',provider_label:'通义千问',base_url:'https://dashscope.aliyuncs.com/compatible-mode/v1',model:'qwen-plus'},{provider:'openai',provider_label:'OpenAI',base_url:'https://api.openai.com/v1',model:'gpt-4o-mini'}]};
-const runtime = {llm:{card_status:'unconfigured'},search:{configured:false},embedding:{configured:false},publisher:{configured:true},story_skills:{enabled:true},oh_story:{enabled:true}};
-const filterOptions = {project_ids:['demo'],model_providers:['DeepSeek'],model_ids:['deepseek-chat'],categories:['writing','planning','review'],operations:['write','plan','review'],statuses:['success'],project_options:[{value:'demo',label:'雾岛来信'}],model_options:[{value:'deepseek-chat',label:'deepseek-chat'}]};
-const today = new Date();
-const dateAgo = (days:number) => {const d=new Date(today);d.setDate(d.getDate()-days);return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
-const series = Array.from({length:70},(_,i)=>({date:dateAgo(69-i),user_word_delta:i%4===0?280+i*3:0,agent_word_delta:i%3===0?1200+i*7:0,import_word_delta:0}));
-const modelSeries = series.filter((_,i)=>i%3===0).map((item,i)=>({date:item.date,key:'deepseek-chat',label:'deepseek-chat',calls:2+i%5,tokens_total:3000+i*180,avg_latency_ms:2100+i*20}));
-const records = Array.from({length:12},(_,i)=>({id:`record-${i}`,created_at:`${dateAgo(i)}T10:30:00`,project_id:'demo',project_title:'雾岛来信',chapter_id:`chapter-${i%3+1}`,category:['writing','planning','review'][i%3],operation:['write','plan','review'][i%3],model_id:'deepseek-chat',model_provider:'DeepSeek',tokens_input:1200+i*30,tokens_output:600+i*15,tokens_total:1800+i*45,token_cache:0,latency_ms:2200+i*130,first_token_ms:null,status:'success',error_type:null,error_message:null,error_status_code:null,retry_count:0}));
-const sessions: Record<string, any> = {};
-const messages: Record<string, any[]> = {};
-const changes: Record<string, any[]> = {};
-let sequence = 0;
-const stats={summary:{calls_total:86,success_total:86,tokens_total:168500,tokens_input_total:108000,tokens_output_total:60500,avg_latency_ms:2680,avg_first_token_ms:null},model_time_series:modelSeries,by_model:[{key:'deepseek-chat',label:'deepseek-chat',calls:86,tokens_total:168500}],by_project:[{key:'demo',label:'雾岛来信',calls:86,tokens_total:168500}],options:filterOptions};
-export async function demoRequest(path:string, options:{method?:string;body?:unknown}={}):Promise<any> {
- const method=options.method || 'GET'; const url=path.split('?')[0]; const body=(options.body || {}) as any;
- const params = new URLSearchParams(path.split('?')[1] || '');
- if(url==='/api/tags') return tags;
- if(url==='/api/dashboard/writing') {const start=params.get('start_at')?.slice(0,10)||'';const end=params.get('end_at')?.slice(0,10)||'9999';const selected=series.filter(x=>x.date>=start && x.date<=end);return {summary:{active_days:selected.filter(x=>x.user_word_delta+x.agent_word_delta>0).length,creative_chapters:3},time_series:selected};}
- if(url==='/api/dashboard/llm-api/stats') return stats;
- if(url==='/api/dashboard/llm-api/records') {let items=records.filter(x=>['project_id','model_id','model_provider','category','status'].every(k=>!params.get(k)||String((x as any)[k])===params.get(k))).filter(x=>!params.get('search')||JSON.stringify(x).toLowerCase().includes(params.get('search')!.toLowerCase())).filter(x=>(!params.get('start_at')||x.created_at>=params.get('start_at')!)&&(!params.get('end_at')||x.created_at<=params.get('end_at')!));const key=params.get('sort_by')||'created_at', direction=params.get('sort_order')==='asc'?1:-1;items.sort((a,b)=>{const av=(a as any)[key],bv=(b as any)[key];return av===bv?0:av==null?1:bv==null?-1:av>bv?direction:-direction});const total=items.length;const page=Number(params.get('page')||1),size=Number(params.get('page_size')||20);items=items.slice((page-1)*size,page*size);return {options:filterOptions,records:{items,total,page,page_size:size}};}
- if(url==='/api/settings') {if(method==='PUT') preferences={...preferences,...body};return {preferences,runtime};}
- if(url==='/api/settings/llm/test') return {ok:false,code:'DEMO',message:'演示模式：未连接模型，未发送密钥。',latency_ms:0,tested_at:now};
- if(url==='/api/settings/llm') {if(method==='PUT') llmView={...llmView,provider:body.provider,base_url:body.base_url,model:body.model,enabled:false,has_api_key:false,api_key_mask:null,card_status:'unconfigured'};return llmView;}
- if(url==='/api/novels' && method==='POST') {const id='demo-new';const title=body.preferred_title||'未命名的故事';const p={...project,id,title,status:'DRAFT',confirmed:false,current_chapter:0,request:body,brief:{...project.brief,selected_title:title,synopsis:`示例创作方案：${body.idea||'从一个想法开始。'}`}};projects[id]={...detail,project:p,chapters:[],reserve_count:0};return p;}
- const projectMatch=url.match(/^\/api\/novels\/([^/]+)(?:\/(.*))?$/);const id=projectMatch?.[1];const suffix=projectMatch?.[2]||'';const data=id?projects[id]:null;
- if(data && !suffix && method==='GET') return data;
- if(data && suffix==='confirm') {data.project.confirmed=true;data.project.status='ACTIVE';return data.project;}
- if(data && (suffix==='pause'||suffix==='resume')) {data.project.status=suffix==='pause'?'PAUSED':'ACTIVE';return data.project;}
- if(data && suffix==='brief-versions') return {items:[{version:1,source:'initial',brief:data.project.brief,created_at:now}]};
- if(data && suffix==='brief' && method==='PUT') {data.project.brief=body;return data.project;}
- if(data && (suffix==='brief-regenerate'||suffix==='brief-restore')) return data.project;
- if(data && suffix==='runs') {const n=data.chapters.length+1;const c={...chapters[(n-1)%chapters.length],id:`chapter-${n}`,number:n,title:`第 ${n} 章 · 新的线索`};data.chapters.push(c);data.project.current_chapter=n;data.reserve_count=data.chapters.length;data.latest_events=[{node:'plan',message:'示例：章节规划完成',progress:25},{node:'write',message:'示例：正文生成完成',progress:55},{node:'review',message:'示例：审核通过',progress:85},{node:'commit',message:'示例：章节与记忆已入库',progress:100}];return {items:[{chapter:c,events:data.latest_events}]};}
- if(data && /^chapters\/\d+\/rework$/.test(suffix)) {const n=Number(suffix.split('/')[1]);const c=data.chapters[n-1];if(c){c.version++;c.summary='示例：已根据反馈重做章节。'}return {chapter:c};}
- if(data && suffix==='characters/rebuild') return {processed_chapters:data.chapters.length,character_count:data.characters.length,failures:[]};
- if(data && suffix==='metadata' && method==='PUT') {data.project.title=body.title;return {...summary,...data.project,genre:data.project.request.genre,audience_channel:data.project.request.audience_channel,chapter_count:data.chapters.length,content_chars:0};}
- if(data && !suffix && method==='DELETE') {delete projects[id!];return null;}
- if(url.endsWith('/opening-repair-snapshots/latest')) return {snapshot:null};
- const versionRestore=url.match(/^\/api\/novels\/([^/]+)\/chapters\/(\d+)\/versions\/\d+\/restore$/);
- if(versionRestore){const n=Number(versionRestore[2]),c=projects[versionRestore[1]].chapters[n-1];drafts[n]={chapter_id:c.id,project_id:versionRestore[1],base_version:c.version,title:c.title,content:c.content,source:'restore',applied_change_ids:[],content_hash:`demo-${n}`,created_at:now,updated_at:now};return drafts[n];}
- const rollback=url.match(/^\/api\/assistant\/sessions\/([^/]+)\/rollback$/);
- if(rollback){const session=sessions[rollback[1]],n=session.chapterNumber,c=projects[session.project_id].chapters[n-1];drafts[n]={chapter_id:c.id,project_id:session.project_id,base_version:c.version,title:c.title,content:c.content,source:'rollback',applied_change_ids:[],content_hash:`demo-${n}`,created_at:now,updated_at:now};return drafts[n];}
- const sessionMatch=url.match(/^\/api\/novels\/([^/]+)\/chapters\/(\d+)\/assistant\/sessions$/);
- if(sessionMatch && method==='POST') {const sid=`session-${++sequence}`;sessions[sid]={id:sid,project_id:sessionMatch[1],chapter_id:`chapter-${sessionMatch[2]}`,title:'示例会话',created_at:now,updated_at:now,chapterNumber:Number(sessionMatch[2])};messages[sid]=[];changes[sid]=[];return sessions[sid];}
- const decision=url.match(/^\/api\/assistant\/changes\/([^/]+)\/(approve|reject)$/);
- if(decision) {const entry=Object.values(changes).flat().find((c:any)=>c.id===decision[1]);if(!entry) throw new ApiError('建议不存在');entry.status=decision[2]==='approve'?'approved':'rejected';if(decision[2]==='reject') return entry;const session=sessions[entry.session_id], n=session.chapterNumber, ch=projects[session.project_id].chapters[n-1];drafts[n]={chapter_id:ch.id,project_id:session.project_id,base_version:ch.version,title:ch.title,content:entry.after_content,source:'assistant',applied_change_ids:[entry.id],content_hash:`demo-${n}`,created_at:now,updated_at:now};return {change_set:entry,draft:drafts[n]};}
- const chat=url.match(/^\/api\/assistant\/sessions\/([^/]+)\/(messages|changes)$/);
- if(chat){const sid=chat[1];if(method==='GET') return {items:chat[2]==='messages'?(messages[sid]||[]):(changes[sid]||[])};const user={id:`msg-${++sequence}`,session_id:sid,sequence,role:'user',mode:body.mode,content:body.content,created_at:now};const assistant={id:`msg-${++sequence}`,session_id:sid,sequence,role:'assistant',mode:body.mode,content:'【演示回复】可以通过环境细节和人物动作增强悬念，让读者跟随主角逐步发现线索。此回复为预设示例。',created_at:now};messages[sid]=[...(messages[sid]||[]),user,assistant];let change=null;if(body.mode==='editor'||body.quick_action){const session=sessions[sid],n=session.chapterNumber,ch=projects[session.project_id].chapters[n-1],before=drafts[n]?.content||ch.content;const after=before+'\n\n窗外的雨突然停了。她抬起头，看见玻璃上映出一个陌生人的影子。';change={id:`change-${++sequence}`,session_id:sid,message_id:assistant.id,chapter_id:ch.id,operation:'replace',base_version:ch.version,base_draft_hash:drafts[n]?.content_hash||'',before_title:ch.title,before_content:before,after_title:ch.title,after_content:after,diff_json:{sections:[{lines:[{type:'added',text:'窗外的雨突然停了。她抬起头，看见玻璃上映出一个陌生人的影子。'}]}]},explanation:'示例修改：增加一个视觉细节，为下一段制造悬念。',status:'proposed',created_at:now};changes[sid]=[...(changes[sid]||[]),change];}return {user_message:user,assistant_message:assistant,change_set:change};}
+import { chapterKey, createDemoDatabase, createProject, defaultLlm, isoNow } from './demo-seed';
+import { loadDatabase, persist, nextId, fail, detailFor, summaryFor, touch, recordVersion, markReady, clearProjectDependents } from './demo-state';
+import { demoAnalytics } from './demo-analytics';
+import { demoChapter, demoAssistant } from './demo-reader';
 
- if(url==='/api/health') return {mode:'offline',apis:{}};
- if(url==='/api/novels' && method==='GET') return {items:Object.values(projects).map((d:any)=>({...summary,...d.project,audience_channel:d.project.request.audience_channel,genre:d.project.request.genre,chapter_count:d.chapters.length,content_chars:d.chapters.reduce((n:number,c:any)=>n+countChapterChars(c.content||''),0)}))};
- if(url==='/api/novels/demo' && method==='GET') return detail;
- if(url.endsWith('/opening-repair-snapshots/latest')) return null;
- const match=url.match(/^\/api\/novels\/([^/]+)\/chapters\/(\d+)\/(workspace|edit-draft|revisions)$/);
- if(match){const number=Number(match[2]); const chapter=projects[match[1]]?.chapters[number-1]; if(!chapter) throw new ApiError('章节不存在');
-  if(match[3]==='edit-draft' && method==='PUT'){const body=options.body as {title:string;content:string}; drafts[number]={chapter_id:chapter.id,project_id:'demo',base_version:1,title:body.title,content:body.content,source:'manual',applied_change_ids:[],content_hash:`demo-${number}`,created_at:now,updated_at:now};return drafts[number]}
-  if(match[3]==='edit-draft' && method==='DELETE'){delete drafts[number];return null}
-  if(match[3]==='revisions' && drafts[number]) {chapter.title=drafts[number].title;chapter.content=drafts[number].content;chapter.version++;delete drafts[number];return {chapter,reset_chapters:[],warnings:[]}}
-  return {project:{id:match[1],title:projects[match[1]].project.title,status:projects[match[1]].project.status},chapter,draft:drafts[number]||null,editable:true,capabilities:{edit_draft:true,use_assistant:true,commit_revision:true,submit_for_review:false,replan:false,accept_with_warnings:false},read_only_reason:null,downstream:{count:0,first_number:null,last_number:null},versions:[{version:chapter.version,kind:'OFFICIAL',title:chapter.title,source:'demo',is_official:true,content:chapter.content,created_at:now}],sessions:[]};}
- throw new ApiError('作品集演示仅支持浏览与临时编辑，不连接后端或 AI。');
+// This module replaces server requests only; the Vue pages and styles are the original product.
+let db = loadDatabase();
+export function resetDemo() { db = createDemoDatabase(); persist(db); }
+export function demoProjectIds() { return Object.keys(db.projects); }
+function recordBrief(detail: ProjectDetail, source: string, feedback?: string) {
+  const versions = db.briefVersions[detail.project.id] ||= [];
+  versions.push({ version: (versions.at(-1)?.version || 0) + 1, source, feedback, brief: structuredClone(detail.project.brief), created_at: isoNow() });
+  detail.project.updated_at = isoNow();
+}
+function generateChapter(detail: ProjectDetail, number: number) {
+  if (!detail.project.confirmed) fail('请先确认创作方案。');
+  const old = detail.chapters.find(c => c.number === number);
+  let content: string, title: string;
+  if (['demo', 'demo-revision'].includes(detail.project.id) && number <= 3) {
+    [title, content] = sampleChapters[number - 1] as [string, string];
+  } else {
+    title = number <= 3 ? (detail.project.brief.opening_three_chapters[number - 1] || '新的线索') : '东堤的回声';
+    content = `【演示章节 · 本地预设文本，非模型实时生成】\n\n${detail.project.title} · 第 ${number} 章\n\n${detail.project.request.idea}\n\n傍晚，海风将窗边的信纸轻轻翻起。${detail.project.brief.protagonist_name || '主角'}重新读了一遍纸上的日期，没有急着解释它，而是先把能够确认的事情列在笔记本上。\n\n门外传来脚步声。来人把一只旧木盒放在桌上，说这是从仓库里找到的，锁扣已经生锈。盒底藏着半张褪色的路线图，边角有一道新留下的折痕。\n\n“先核对记录，再决定去哪里。”主角把木盒推回灯下。两人约好第二天去问保管档案的老人，今晚只整理线索，不把猜测当成已经发生的事实。\n\n窗外的灯一盏接一盏亮起。笔记本的最后一行写着：还有一个人，知道那封信为什么没有寄出。`;
+  }
+  const chapter: ChapterRecord = { id: old?.id || nextId(db, 'chapter'), number, title, content, summary: '示例章节：整理旧信与路线图的证据，为下一步调查建立线索。', status: 'READY', version: (old?.version || 0) + 1, created_at: old?.created_at || isoNow() };
+  if (old) detail.chapters.splice(detail.chapters.indexOf(old), 1, chapter); else detail.chapters.push(chapter);
+  delete db.drafts[chapterKey(detail.project.id, number)];
+  recordVersion(db, detail, chapter); markReady(detail, chapter);
+  const tokens_output = countChapterChars(chapter.content || '');
+  db.records.unshift({ id: nextId(db, 'record'), created_at: isoNow(), project_id: detail.project.id, project_title: detail.project.title,
+    chapter_id: chapter.id, category: 'writing', operation: 'write', model_id: 'deepseek-chat', model_provider: 'DeepSeek',
+    tokens_input: 1200, tokens_output, tokens_total: 1200 + tokens_output, token_cache: 0, latency_ms: 0, first_token_ms: 0,
+    status: 'success', error_type: null, error_message: null, error_status_code: null, retry_count: 0 });
+  detail.latest_events = [{ node: 'plan', message: '示例：按创作方案完成章节规划', progress: 25 }, { node: 'write', message: '示例：已载入本地章节文本', progress: 55 }, { node: 'review', message: '示例：审核通过', progress: 85 }, { node: 'commit', message: '示例：章节、版本与时间线已保存', progress: 100 }];
+  detail.timeline = detail.timeline.filter(t => t.chapter_number !== number);
+  detail.timeline.push({ chapter_number: number, event: chapter.summary });
+  return chapter;
+}
+function handle(path: string, method: string, body: Record<string, any>) {
+  const [url = '', query = ''] = path.split('?'), params = new URLSearchParams(query);
+  if (url === '/api/tags' && method === 'GET') return tags;
+  if (url === '/api/health') return { mode: 'offline', apis: {}, demo: true };
+  if (url.startsWith('/api/dashboard/')) return demoAnalytics(db, url, params);
+  if (url.startsWith('/api/assistant/')) return demoAssistant(db, url, method, body);
+  if (url === '/api/settings') {
+    if (method === 'PUT') for (const key of ['daily_chapters', 'reserve_target', 'budget_limit', 'debug_mode']) if (key in body) db.preferences[key] = body[key];
+    return { preferences: db.preferences, runtime: { llm: { enabled: db.llm.enabled, configured: db.llm.has_api_key, provider: '本地演示（不调用模型）', provider_label: db.llm.provider_label, model: db.llm.model, card_status: db.llm.card_status, source: 'offline' }, search: { configured: false }, embedding: { configured: false }, publisher: { configured: true, enabled: false }, story_skills: { enabled: true }, oh_story: { enabled: true } } };
+  }
+  if (url === '/api/settings/llm/test') return { ok: true, code: 'DEMO_SIMULATION', message: '演示连接成功：仅在本地模拟，没有发送 API 请求或密钥。', latency_ms: 0, tested_at: isoNow() };
+  if (url === '/api/settings/llm') {
+    if (method === 'PUT') {
+      // Allowlist excludes API keys: original fields work, but credentials are never stored or sent.
+      for (const key of ['provider', 'base_url', 'model', 'enabled', 'timeout_seconds', 'max_retries'] as const) if (key in body) (db.llm as unknown as Record<string, unknown>)[key] = body[key];
+      db.llm.provider_label = `${db.llm.presets.find(p => p.provider === db.llm.provider)?.provider_label || '兼容服务'}（演示）`;
+      db.llm.source = 'offline'; db.llm.version++; db.llm.card_status = db.llm.enabled ? 'enabled' : 'disabled';
+    }
+    if (method === 'DELETE') db.llm = { ...defaultLlm(), has_api_key: false, api_key_mask: null, card_status: 'unconfigured', version: db.llm.version + 1 };
+    return db.llm;
+  }
+  if (url === '/api/novels') {
+    if (method === 'GET') return { items: Object.values(db.projects).map(summaryFor) };
+    if (method === 'POST') {
+      if (!String(body.idea || '').trim()) fail('请填写核心想法。');
+      const id = nextId(db, 'demo-new'), detail = createProject(id, body);
+      if (detail.project.title === '未命名的故事') { detail.project.title = '潮汐之后'; detail.project.brief.selected_title = detail.project.title; }
+      db.projects[id] = detail; recordBrief(detail, 'initial'); return detail.project;
+    }
+  }
+  const projectMatch = url.match(/^\/api\/novels\/([^/]+)(?:\/(.*))?$/);
+  if (projectMatch) {
+    const id = decodeURIComponent(projectMatch[1]!), suffix = projectMatch[2] || '', detail = detailFor(db, id);
+    if (!suffix && method === 'GET') return detail;
+    if (!suffix && method === 'DELETE') { clearProjectDependents(db, id); delete db.projects[id]; return null; }
+    if (suffix === 'metadata' && method === 'PUT') {
+      const title = String(body.title || '').trim(); if (!title) fail('书名不能为空。'); detail.project.title = title;
+      db.records.filter(r => r.project_id === id).forEach(r => { r.project_title = title; });
+      touch(detail); return summaryFor(detail);
+    }
+    if (['confirm', 'pause', 'resume', 'recover'].includes(suffix) && method === 'POST') {
+      if (suffix === 'confirm') { detail.project.confirmed = true; detail.project.brief.selected_title = detail.project.title; }
+      detail.project.status = suffix === 'pause' ? 'PAUSED' : 'ACTIVE'; touch(detail); return detail.project;
+    }
+    if (suffix === 'brief-versions') return { items: (db.briefVersions[id] || []).slice().reverse() };
+    if (suffix === 'brief' && method === 'PUT') { detail.project.brief = structuredClone(body) as CreativeBrief; detail.project.title = detail.project.brief.selected_title; recordBrief(detail, 'manual_edit'); return detail.project; }
+    if (suffix === 'brief-regenerate' && method === 'POST') {
+      const feedback = String(body.feedback || '').trim();
+      if (feedback) detail.project.brief.synopsis += `\n\n示例调整方向：${feedback}`;
+      else detail.project.brief.selling_points = [...detail.project.brief.selling_points.filter(p => p !== '以人物选择推动下一条线索'), '以人物选择推动下一条线索'];
+      recordBrief(detail, feedback ? 'feedback_regenerate' : 'regenerate', feedback); return detail.project;
+    }
+    if (suffix === 'brief-restore' && method === 'POST') {
+      const version = db.briefVersions[id]?.find(v => v.version === body.version) || fail('方案版本不存在。', 404);
+      detail.project.brief = structuredClone(version.brief); detail.project.title = version.brief.selected_title; recordBrief(detail, 'restore'); return detail.project;
+    }
+    if (suffix === 'runs' && method === 'POST') {
+      if (detail.project.status !== 'ACTIVE') fail('请先恢复创作。');
+      const number = detail.chapters.find(c => c.status !== 'READY')?.number || Math.max(0, ...detail.chapters.map(c => c.number)) + 1;
+      const chapter = generateChapter(detail, number);
+      return { items: [{ chapter, events: detail.latest_events }] };
+    }
+    if (suffix === 'characters/rebuild' && method === 'POST') {
+      if (!detail.characters.length) detail.characters = [{ id: nextId(db, 'character'), name: detail.project.brief.protagonist_name || '主角', role: 'protagonist', immutable_facts: [detail.project.brief.protagonist_profile], current_state: { last_seen_chapter: detail.project.current_chapter, current_goal: detail.project.brief.main_conflict } }];
+      detail.characters.forEach(c => { c.version = (c.version || 0) + 1; });
+      return { processed_chapters: detail.chapters.filter(c => c.status === 'READY').length, character_count: detail.characters.length, removed_nonimportant: 0, failures: [] };
+    }
+    if (suffix === 'opening-repair-preview') {
+      const eligible = Boolean(detail.chapter_failures?.some(f => f.opening_repair_eligible));
+      return { eligible, reasons: eligible ? [] : ['当前示例的开篇没有需要修复的数据。'], project_updated_at: detail.project.updated_at,
+        detected_problems: ['主角在开篇提前知道后续观测站线索（示例）'], opening_anchor: detail.project.brief.opening_chapter_anchors?.[0] || {},
+        character_changes: [{ name: detail.project.brief.protagonist_name || '主角', from_relationships: { 观测站: '已知' }, to_relationships: { 观测站: '尚未获知' }, moved_to_future: true }],
+        chapter_changes: detail.chapters.map(c => ({ chapter_number: c.number, from_status: c.status, to_status: c.number === 1 ? 'FAILED' : 'PLANNED', from_title: c.title, to_title: c.title })), preserved_artifacts: ['当前正文与版本', '人物记忆', '创作方案', '可回退快照'] };
+    }
+    if (suffix === 'opening-repair-snapshots/latest') { const s = db.snapshots[id]; return { snapshot: s ? { id: s.id, status: s.status, created_at: s.created_at, rollback_allowed: s.rollback_allowed, blocked_reason: s.rollback_allowed ? null : '示例已回退' } : null }; }
+    if (suffix === 'opening-repair' && method === 'POST') {
+      if (!body.confirm || body.expected_project_updated_at !== detail.project.updated_at) fail('请确认最新的修复预览。', 409);
+      const snapshot = { id: nextId(db, 'snapshot'), status: 'applied', created_at: isoNow(), rollback_allowed: true, detail: structuredClone(detail) };
+      db.snapshots[id] = snapshot;
+      detail.chapters.forEach(c => { c.status = c.number === 1 ? 'FAILED' : 'PLANNED'; });
+      detail.project.status = 'HUMAN_REQUIRED'; touch(detail); return { snapshot_id: snapshot.id, next_action: 'regenerate_first_chapter' };
+    }
+    if (/^opening-repair\/[^/]+\/rollback$/.test(suffix) && method === 'POST') {
+      const snapshot = db.snapshots[id];
+      if (!snapshot || !snapshot.rollback_allowed || snapshot.id !== suffix.split('/')[1]) fail('快照不存在或已经回退。', 404);
+      db.projects[id] = structuredClone(snapshot.detail); snapshot.rollback_allowed = false; snapshot.status = 'rolled_back'; return { restored: true };
+    }
+    const chapterMatch = suffix.match(/^chapters\/(\d+)\/(.+)$/);
+    if (chapterMatch) {
+      if (chapterMatch[2] === 'rework' && method === 'POST') return { chapter: generateChapter(detail, Number(chapterMatch[1])) };
+      return demoChapter(db, detail, Number(chapterMatch[1]), chapterMatch[2]!, method, body);
+    }
+  }
+  return fail(`没有对应的演示操作：${method} ${url}`, 404);
+}
+export async function demoRequest(path: string, options: { method?: string; body?: unknown; signal?: AbortSignal } = {}): Promise<any> {
+  if (options.signal?.aborted) throw new ApiError('请求已取消', { kind: 'aborted' });
+  // Match JSON request semantics, including Vue proxy values emitted by the original forms.
+  const body = options.body === undefined ? {} : JSON.parse(JSON.stringify(options.body));
+  const method = (options.method || 'GET').toUpperCase(), result = handle(path, method, body);
+  if (method !== 'GET') persist(db);
+  return structuredClone(result);
 }

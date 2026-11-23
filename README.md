@@ -20,6 +20,20 @@ npm run dev
 
 NovelAI、TravelAI 和月下疑局的公开演示保留原入口。TravelAI 为基于开源项目的二次开发，相关案例说明了工作范围。演示中的固定样本不用于证明真实用户规模或业务增益。
 
+## NovelAI 完整界面演示
+
+`novel-agent-demo-src/` 沿用 [NovelAI](https://github.com/1011-wyl/NovelAI) 提交 `93de5d9` 的全部页面。60 个 Vue 组件和 CSS 文件保持原样，校验记录在 `docs/novel-demo-upstream.json`。演示入口仍为 `/novel-agent-demo/`，首次访问自动选中示例小说。
+
+```sh
+cd novel-agent-demo-src
+npm ci
+npm run check:ui
+npm test
+npm run build
+```
+
+构建会重新生成 `public/novel-agent-demo/` 的全部页面资源，随后在根目录运行 `npm run build`。Pages 工作流自动执行同样的界面校验、测试和构建，避免源代码已更新但公开演示仍使用旧文件。完整功能与示例数据说明见 [小说演示指南](docs/novel-demo.md)。
+
 ## 月下疑局移动端演示
 
 `moonlit-demo-src/` 保存新版移动端界面和浏览器规则引擎，替换原 `/moonlit-demo/` 入口。角色、存档和偏好仅保存在当前浏览器，不调用模型或后端服务。新版使用独立的存储键，不读取旧版固定剧情演示的存档。

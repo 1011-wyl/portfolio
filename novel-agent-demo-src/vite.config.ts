@@ -10,22 +10,15 @@ export default defineConfig({
   root: rootDir,
   publicDir: "public",
   plugins: [vue()],
+  css: { postcss: { plugins: [] } },
   appType: "spa",
   resolve: {
     alias: {
       "@": path.resolve(rootDir, "src"),
     },
   },
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://127.0.0.1:8000",
-        changeOrigin: true,
-      },
-    },
-  },
   build: {
-    outDir: "dist",
+    outDir: "../public/novel-agent-demo",
     emptyOutDir: true,
   },
 });

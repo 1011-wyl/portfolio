@@ -1,2 +1,4 @@
 *.pdf binary
 *.png binary
+novel-agent-demo-src/index.html text eol=lf
+public/novel-agent-demo/index.html text eol=lf

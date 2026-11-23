@@ -62,7 +62,6 @@ async function onClear() {
           <button type="button" class="text-close" @click="requestClose">关闭</button>
         </header>
         <div class="body">
-          <p>演示模式仅展示配置界面，请勿输入真实 API Key；不会连接模型或保存密钥。</p>
           <LlmProviderFields
             :provider="llm.form.provider"
             :base-url="llm.form.baseUrl"
@@ -76,7 +75,7 @@ async function onClear() {
             v-model="llm.form.apiKey"
             :mask="llm.view.value.api_key_mask"
             :show="llm.showKey.value"
-            :disabled="true"
+            :disabled="llm.busy.value"
             @update:show="(value) => { llm.showKey.value = value; }"
             @update:model-value="() => { llm.markDirty(); }"
           />

@@ -6,7 +6,6 @@ const app = useAppStore();
 </script>
 
 <template>
-  <div class="demo-banner">作品集演示 · 数据和 AI 回复均为模拟；内容仅在本次页面会话中保留 <a href="../#projects">返回作品集</a></div>
   <RouterView />
   <div
     v-if="app.flashMessage"
@@ -24,7 +23,6 @@ const app = useAppStore();
 </template>
 
 <style scoped>
-.demo-banner { position: relative; z-index: 1400; padding: 8px 12px; text-align: center; background: #ecf4ed; color: #315a3c; font-size: 13px; } .demo-banner a { margin-left: 12px; text-decoration: underline; color: inherit; }
 .flash {
   position: fixed;
   top: 16px;
