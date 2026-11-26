@@ -18,7 +18,7 @@ npm run dev
 - `src/data/productChat.ts`：基于简历的预设问答，无外部模型调用。
 - `public/resume.pdf`：最新 AI 产品经理简历；两页预览分别为 `resume-preview.png` 和 `resume-preview-2.png`，更新简历时同步更新预览。
 
-NovelAI、TravelAI 和月下疑局的公开演示保留原入口。TravelAI 为基于开源项目的二次开发，相关案例说明了工作范围。演示中的固定样本不用于证明真实用户规模或业务增益。
+NovelAI、TravelAI 和月下疑局的公开演示保留原入口。TravelAI 的产品设计从 0 独立完成，相关案例说明了工作范围。演示中的固定样本不用于证明真实用户规模或业务增益。
 
 ## NovelAI 完整界面演示
 

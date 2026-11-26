@@ -40,9 +40,9 @@ export const repos: Repo[] = [
     name: 'NovelAI',
     displayName: 'NovelAI · 长篇小说创作智能体',
     description:
-      '让创作者确认方案、逐章生成并审核修改，以草稿、正式版本和长期记忆管理持续创作。',
+      '面向长篇小说作者，针对 AI 续写容易偏离大纲、前后设定不一致的问题，提供从方案确认到逐章审阅的创作工作台。',
     rationale:
-      '将创作拆为 6 个步骤，设计差异预览、人工批准和正式提交路径；通过 8 维质量检查、跨章一致性审核与用量仪表盘管理质量和成本。',
+      '设计差异预览、人工确认和版本恢复，让作者决定哪些 AI 修改可以定稿，并把人物设定和时间线纳入跨章审核。',
     language: 'Python',
     stars: 0,
     url: 'https://github.com/1011-wyl/NovelAI',
@@ -58,9 +58,9 @@ export const repos: Repo[] = [
     name: 'TravelAI',
     displayName: 'TravelAI · 旅行规划助手',
     description:
-      '把城市偏好、地图、天气、预算与行程组织成可编辑、可追问、可导出的逐日旅行计划。',
+      '面向自由行用户，把分散的目的地信息、出行偏好和预算整理成可编辑的逐日行程，方便用户在旅途中继续调整。',
     rationale:
-      '基于开源项目二次开发，重点进行规划体验重设计、预算与行程编辑联动、地图服务回退，并验证规划到导出的完整流程。',
+      '从 0 独立完成产品设计，梳理生成初稿、调整行程、核对预算和导出分享的流程，并为关键步骤制定验收标准。',
     language: 'Python',
     stars: 0,
     url: 'https://github.com/1011-wyl/TravelAI',
@@ -74,11 +74,11 @@ export const repos: Repo[] = [
   },
   {
     name: 'moomhit',
-    displayName: '月下疑局 · 多智能体狼人杀',
+    displayName: '月下疑局 · AI 语音狼人杀',
     description:
-      '本地 12 人文字狼人杀：11 个 AI 在隐藏信息、角色技能、警长竞选与并发投票中完成推理博弈。',
+      '面向想一个人也能开局的玩家，设计 12 人语音狼人杀。玩家可与 11 名 AI 同局，通过角色发言、讨论和投票推进推理。',
     rationale:
-      '[多智能体游戏] 以状态机管理完整狼人杀规则，为不同角色隔离私有信息；并发驱动 AI 决策，加入严格投票超时与失败恢复，并通过批量对局验证完整闭环。',
+      '通过竞品调研梳理同局与观战两种场景，围绕角色发言是否容易区分、玩家能否跟上局势和看懂投票结果，设计完整对局体验。',
     language: 'TypeScript',
     stars: 0,
     url: 'https://github.com/1011-wyl/moomhit',
@@ -93,11 +93,11 @@ export const repos: Repo[] = [
   },
   {
     name: 'psychology_system',
-    displayName: '心理咨询与诊断平台',
+    displayName: '心理咨询与诊断平台 · 心理服务管理',
     description:
-      '面向用户、咨询师和管理员的心理服务平台，覆盖心理评估、预约管理、报告查看与角色权限隔离。',
+      '为来访者提供心理评估、咨询预约和报告查看入口，让他们能查看预约进度，并了解接下来要做什么。',
     rationale:
-      '[全栈系统] Spring Boot + Vue 前后端分离，围绕敏感业务实现服务端权限校验、预约并发约束与 BCrypt 密码迁移；三类角色拥有清晰的数据与操作边界。',
+      '梳理来访者、咨询师和管理员的分工，明确预约由谁确认和处理，以及谁可以查看敏感评估报告。',
     language: 'Java',
     stars: 0,
     url: 'https://github.com/1011-wyl/psychology_system',
