@@ -7,11 +7,9 @@
   --projects-ink: #eee9df;
   --projects-muted: #bdb8ae;
   display: grid;
-  grid-template-areas:
-    "header stage"
-    "details stage";
+  grid-template-areas: "sidebar stage";
   grid-template-columns: 30% minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   height: 100dvh;
   overflow: clip;
   border: 1px solid var(--projects-border);
@@ -20,15 +18,25 @@
   color: var(--projects-ink);
 }
 
+.projects-sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  gap: 1.25rem;
+  overflow-y: auto;
+  padding: 1.5rem clamp(1.25rem, 2.1vw, 2.5rem);
+  border-inline-end: 1px solid var(--projects-border);
+  text-align: center;
+}
+
 .projects-header {
   grid-area: header;
   display: flex;
   align-items: baseline;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 0.25rem 0.65rem;
-  padding: 1rem clamp(1.25rem, 2.1vw, 2.5rem);
-  border-block-end: 1px solid var(--projects-border);
-  border-inline-end: 1px solid var(--projects-border);
 }
 
 .projects-header :is(h2, h3) {
@@ -44,13 +52,12 @@
 
 .projects-details {
   grid-area: details;
-  overflow-y: auto;
-  min-height: 0;
-  padding: 1.5rem clamp(1.25rem, 2.1vw, 2.5rem);
-  border-inline-end: 1px solid var(--projects-border);
+  max-width: 31rem;
+  margin-inline: auto;
   color: var(--projects-muted);
   font-size: clamp(1rem, 1.08vw, 1.25rem);
   line-height: 1.6;
+  text-align: center;
 }
 
 .projects-details p {
@@ -66,12 +73,13 @@
 
 .projects-actions {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 0.5rem 1.15rem;
   margin-top: 1.65rem;
 }
 
-.projects-actions a {
+.projects-actions :is(a, button) {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -85,9 +93,28 @@
   text-decoration: underline;
 }
 
+.projects-prd-button {
+  padding-inline: 0.75rem;
+  border: 1px solid #596d7e;
+  border-radius: 0.45rem;
+  background: #202933;
+  cursor: pointer;
+}
+
+.projects-prd-button:hover {
+  background: #2c3946;
+}
+
 .projects-actions svg {
   width: 1rem;
   height: 1rem;
+}
+
+.projects-prd-preview {
+  display: block;
+  width: 100%;
+  height: min(66dvh, 48rem);
+  border: 0;
 }
 
 .projects-stage {
@@ -176,9 +203,17 @@
     grid-template-rows: auto auto auto;
   }
 
-  .projects-header,
+  .projects-sidebar {
+    display: contents;
+  }
+
+  .projects-header {
+    padding: 1rem 1.25rem;
+    border-block-end: 1px solid var(--projects-border);
+  }
+
   .projects-details {
-    border-inline-end: 0;
+    padding: 1.5rem 1.25rem;
   }
 
   .projects-stage {

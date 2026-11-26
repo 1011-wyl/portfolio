@@ -7,6 +7,7 @@ export interface Repo {
   stars: number;
   url: string;
   previewUrl?: string;
+  prdUrl?: string;
   techStack: string[];
   icon: string;
   gradient: string;

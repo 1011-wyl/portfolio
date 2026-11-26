@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { repos } from '../data/repos';
+import type { Repo } from '../data/repos';
 import './Projects.css';
 
 // A second copy lets four projects fill both edges of the curved track.
@@ -21,8 +24,15 @@ function distanceAroundRail(slot: number, position: number): number {
 function Projects(): JSX.Element {
   const stageRef = useRef<HTMLDivElement>(null);
   const [activeSlot, setActiveSlot] = useState(0);
+  const [prdDialog, setPrdDialog] = useState<{ project: Repo; open: boolean } | null>(null);
   const project = railProjects[activeSlot];
   const [title, subtitle] = project.displayName.split(' · ');
+  const prdUrl = prdDialog?.project.prdUrl;
+  const hasLocalPdf = prdUrl?.startsWith('./') && /\.pdf(?:[?#]|$)/i.test(prdUrl);
+
+  function closePrd() {
+    setPrdDialog((current) => current && { ...current, open: false });
+  }
 
   useEffect(() => {
     const element = stageRef.current;
@@ -199,31 +209,41 @@ function Projects(): JSX.Element {
   return (
     <section id="projects" className="projects-section" aria-labelledby="projects-heading">
       <div className="projects-showcase">
-        <div className="projects-header">
-          <h2 id="projects-heading">项目展示</h2>
-          <span aria-hidden="true">/</span>
-          <h3>{title}</h3>
-        </div>
+        <div className="projects-sidebar">
+          <div className="projects-header">
+            <h2 id="projects-heading">项目展示</h2>
+            <span aria-hidden="true">/</span>
+            <h3>{title}</h3>
+          </div>
 
-        <div
-          id="projects-description"
-          className="projects-details"
-          role="tabpanel"
-          aria-labelledby={`project-preview-${activeSlot}`}
-          aria-live="polite"
-        >
-          <p className="projects-meta">{subtitle ?? project.language}</p>
-          <p>{project.description}</p>
-          <p>{project.rationale.replace(/^\[[^\]]+\]\s*/, '')}</p>
-          <div className="projects-actions">
-            {project.previewUrl && (
-              <a href={project.previewUrl} target="_blank" rel="noopener noreferrer">
-                体验演示 <LaunchIcon />
+          <div
+            id="projects-description"
+            className="projects-details"
+            role="tabpanel"
+            aria-labelledby={`project-preview-${activeSlot}`}
+            aria-live="polite"
+          >
+            <p className="projects-meta">{subtitle ?? project.language}</p>
+            <p>{project.description}</p>
+            <p>{project.rationale.replace(/^\[[^\]]+\]\s*/, '')}</p>
+            <div className="projects-actions">
+              {project.previewUrl && (
+                <a href={project.previewUrl} target="_blank" rel="noopener noreferrer">
+                  体验演示 <LaunchIcon />
+                </a>
+              )}
+              <a href={project.url} target="_blank" rel="noopener noreferrer">
+                <GitHubIcon /> 查看源码
               </a>
-            )}
-            <a href={project.url} target="_blank" rel="noopener noreferrer">
-              <GitHubIcon /> 查看源码
-            </a>
+              <button
+                className="projects-prd-button"
+                type="button"
+                aria-haspopup="dialog"
+                onClick={() => setPrdDialog({ project, open: true })}
+              >
+                <DescriptionOutlinedIcon /> 查看 PRD
+              </button>
+            </div>
           </div>
         </div>
 
@@ -262,6 +282,35 @@ function Projects(): JSX.Element {
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={prdDialog?.open ?? false}
+        onClose={closePrd}
+        aria-labelledby="projects-prd-title"
+        aria-describedby={hasLocalPdf ? undefined : 'projects-prd-description'}
+        fullWidth
+        maxWidth={hasLocalPdf ? 'lg' : 'xs'}
+        slotProps={{ paper: { sx: { bgcolor: '#191d22', backgroundImage: 'none', border: '1px solid #414a53' } } }}
+      >
+        <DialogTitle id="projects-prd-title">{prdDialog?.project.displayName} · PRD</DialogTitle>
+        {hasLocalPdf ? (
+          <DialogContent dividers sx={{ p: 0 }}>
+            <iframe className="projects-prd-preview" src={prdUrl} title="产品需求文档预览" />
+          </DialogContent>
+        ) : (
+          <DialogContent>
+            <DialogContentText id="projects-prd-description">
+              {prdUrl ? '在新标签页查看这份产品需求文档。' : '这个项目的 PRD 暂未发布。'}
+            </DialogContentText>
+          </DialogContent>
+        )}
+        <DialogActions>
+          {prdUrl && (
+            <Button href={prdUrl} target="_blank" rel="noopener noreferrer">打开文档</Button>
+          )}
+          <Button onClick={closePrd} autoFocus>关闭</Button>
+        </DialogActions>
+      </Dialog>
     </section>
   );
 }
