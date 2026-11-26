@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tab, Tabs } from '@mui/material';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LaunchIcon from '@mui/icons-material/Launch';
@@ -11,6 +11,8 @@ import './Projects.css';
 const railProjects = [...repos, ...repos];
 const wheelPixelsPerProject = 320;
 const wheelSettleDelay = 140;
+
+type ProjectDocument = 'prd' | 'research';
 
 function wrap(value: number, length: number): number {
   return ((value % length) + length) % length;
@@ -24,11 +26,18 @@ function distanceAroundRail(slot: number, position: number): number {
 function Projects(): JSX.Element {
   const stageRef = useRef<HTMLDivElement>(null);
   const [activeSlot, setActiveSlot] = useState(0);
-  const [prdDialog, setPrdDialog] = useState<{ project: Repo; open: boolean } | null>(null);
+  const [prdDialog, setPrdDialog] = useState<{
+    project: Repo;
+    open: boolean;
+    selected: ProjectDocument;
+  } | null>(null);
   const project = railProjects[activeSlot];
   const [title, subtitle] = project.displayName.split(' · ');
-  const prdUrl = prdDialog?.project.prdUrl;
-  const hasLocalPdf = prdUrl?.startsWith('./') && /\.pdf(?:[?#]|$)/i.test(prdUrl);
+  const activeDocument = prdDialog?.selected ?? 'prd';
+  const hasResearch = Boolean(prdDialog?.project.researchUrl);
+  const documentUrl = activeDocument === 'research' ? prdDialog?.project.researchUrl : prdDialog?.project.prdUrl;
+  const documentTitle = activeDocument === 'research' ? '竞品调研报告' : '产品需求文档';
+  const hasLocalPdf = documentUrl?.startsWith('./') && /\.pdf(?:[?#]|$)/i.test(documentUrl);
 
   function closePrd() {
     setPrdDialog((current) => current && { ...current, open: false });
@@ -235,14 +244,16 @@ function Projects(): JSX.Element {
               <a href={project.url} target="_blank" rel="noopener noreferrer">
                 <GitHubIcon /> 查看源码
               </a>
-              <button
-                className="projects-prd-button"
-                type="button"
-                aria-haspopup="dialog"
-                onClick={() => setPrdDialog({ project, open: true })}
-              >
-                <DescriptionOutlinedIcon /> 查看 PRD
-              </button>
+              {project.prdUrl && (
+                <button
+                  className="projects-prd-button"
+                  type="button"
+                  aria-haspopup="dialog"
+                  onClick={() => setPrdDialog({ project, open: true, selected: 'prd' })}
+                >
+                  <DescriptionOutlinedIcon /> 查看 PRD
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -292,21 +303,40 @@ function Projects(): JSX.Element {
         maxWidth={hasLocalPdf ? 'lg' : 'xs'}
         slotProps={{ paper: { sx: { bgcolor: '#191d22', backgroundImage: 'none', border: '1px solid #414a53' } } }}
       >
-        <DialogTitle id="projects-prd-title">{prdDialog?.project.displayName} · PRD</DialogTitle>
-        {hasLocalPdf ? (
-          <DialogContent dividers sx={{ p: 0 }}>
-            <iframe className="projects-prd-preview" src={prdUrl} title="产品需求文档预览" />
-          </DialogContent>
-        ) : (
-          <DialogContent>
-            <DialogContentText id="projects-prd-description">
-              {prdUrl ? '在新标签页查看这份产品需求文档。' : '这个项目的 PRD 暂未发布。'}
-            </DialogContentText>
-          </DialogContent>
+        <DialogTitle id="projects-prd-title">
+          {prdDialog?.project.displayName} · {hasResearch ? '项目文档' : 'PRD'}
+        </DialogTitle>
+        {hasResearch && (
+          <Tabs
+            aria-label="项目文档"
+            value={activeDocument}
+            onChange={(_, selected: ProjectDocument) => {
+              setPrdDialog((current) => current && { ...current, selected });
+            }}
+            sx={{ px: { xs: 1, sm: 2 } }}
+          >
+            <Tab value="prd" label="产品需求文档" id="projects-tab-prd" aria-controls="projects-document-panel" />
+            <Tab value="research" label="竞品调研报告" id="projects-tab-research" aria-controls="projects-document-panel" />
+          </Tabs>
         )}
+        <DialogContent
+          id={hasResearch ? 'projects-document-panel' : undefined}
+          role={hasResearch ? 'tabpanel' : undefined}
+          aria-labelledby={hasResearch ? `projects-tab-${activeDocument}` : undefined}
+          dividers={hasLocalPdf}
+          sx={hasLocalPdf ? { p: 0 } : undefined}
+        >
+          {hasLocalPdf ? (
+            <iframe className="projects-prd-preview" src={documentUrl} title={documentTitle} />
+          ) : (
+            <DialogContentText id="projects-prd-description">
+              在新标签页查看这份文档。
+            </DialogContentText>
+          )}
+        </DialogContent>
         <DialogActions>
-          {prdUrl && (
-            <Button href={prdUrl} target="_blank" rel="noopener noreferrer">打开文档</Button>
+          {documentUrl && (
+            <Button href={documentUrl} target="_blank" rel="noopener noreferrer">打开文档</Button>
           )}
           <Button onClick={closePrd} autoFocus>关闭</Button>
         </DialogActions>

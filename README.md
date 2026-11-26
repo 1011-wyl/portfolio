@@ -14,7 +14,7 @@ npm run dev
 ## 内容维护
 
 - `src/data/profile.ts`：实习与核心产品案例、在校经历。
-- `src/data/repos.ts`：教育背景、项目演示与联系方式。可给对应项目填写 `prdUrl` 来关联 PRD。站内 PDF 放在 `public/prds/`，填写相对地址（例如 `./prds/novelai.pdf`）即可在弹窗预览，也可填写已公开的在线文档链接。
+- `src/data/repos.ts`：教育背景、项目演示与联系方式。填写 `prdUrl` 后会显示「查看 PRD」，也可填写 `researchUrl` 在同一弹窗中加入竞品调研报告。站内 PDF 放在 `public/prds/` 并填写相对地址，公开在线文档可填写完整网址。
 - `src/data/productChat.ts`：基于简历的预设问答，无外部模型调用。
 - `public/resume.pdf`：最新 AI 产品经理简历；两页预览分别为 `resume-preview.png` 和 `resume-preview-2.png`，更新简历时同步更新预览。
 

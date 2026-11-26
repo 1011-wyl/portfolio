@@ -8,6 +8,7 @@ export interface Repo {
   url: string;
   previewUrl?: string;
   prdUrl?: string;
+  researchUrl?: string;
   techStack: string[];
   icon: string;
   gradient: string;
@@ -46,6 +47,7 @@ export const repos: Repo[] = [
     stars: 0,
     url: 'https://github.com/1011-wyl/NovelAI',
     previewUrl: './novel-agent-demo/',
+    prdUrl: './prds/novel-agent-prd.pdf',
     techStack: ['创作流程', '人机协作', '版本管理', '质量审核'],
     icon: '✦',
     gradient: 'linear-gradient(135deg, #15122b, #3c276b)',
@@ -63,6 +65,7 @@ export const repos: Repo[] = [
     stars: 0,
     url: 'https://github.com/1011-wyl/TravelAI',
     previewUrl: './travelai-demo/',
+    prdUrl: './prds/travelai-prd.pdf',
     techStack: ['规划体验', '编辑联动', '异常兜底', '结果复用'],
     icon: '⌖',
     gradient: 'linear-gradient(135deg, #0d2430, #325b68)',
@@ -80,6 +83,8 @@ export const repos: Repo[] = [
     stars: 0,
     url: 'https://github.com/1011-wyl/moomhit',
     previewUrl: './moonlit-demo/',
+    prdUrl: './prds/moonlit-prd.pdf',
+    researchUrl: './prds/moonlit-competitive-research.pdf',
     techStack: ['React 19', 'TypeScript', 'DeepSeek', 'State Machine', 'Vitest'],
     icon: '◐',
     gradient: 'linear-gradient(135deg, #10172c, #293e70)',
